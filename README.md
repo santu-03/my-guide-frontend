@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # 🧭 Tour Guide Frontend
 
 A sleek, performant SPA for discovering tours, booking trips, and managing profiles — built with **React**, **Vite**, and **Tailwind CSS**. Optimized for fast loads, modern DX, and smooth integration with the backend API.
@@ -15,24 +13,24 @@ A sleek, performant SPA for discovering tours, booking trips, and managing profi
 
 ## ✨ Features
 
-* **Responsive, mobile-first UI** with Tailwind
-* **Blazing-fast HMR & builds** via Vite
-* **Component-driven** React architecture
-* **Client-side routing** with React Router
-* **Typed env support** via `import.meta.env` (`VITE_*`)
-* **API integration** with fetch/Axios, token handling, error boundaries
-* **Production-friendly** SPA fallback configs for Vercel/Netlify
+- **Responsive, mobile-first UI** with Tailwind
+- **Blazing-fast HMR & builds** via Vite
+- **Component-driven** React architecture
+- **Client-side routing** with React Router
+- **Typed env support** via `import.meta.env` (`VITE_*`)
+- **API integration** with fetch/Axios, token handling, error boundaries
+- **Production-friendly** SPA fallback configs for Vercel/Netlify
 
 ---
 
 ## 🧱 Tech Stack
 
-* **React 18+**
-* **Vite** (dev server & bundler)
-* **Tailwind CSS** (utility-first)
-* **React Router**
-* **Axios** or **fetch** (pick one)
-* **ESLint + Prettier** (optional but recommended)
+- **React 18+**
+- **Vite** (dev server & bundler)
+- **Tailwind CSS** (utility-first)
+- **React Router**
+- **Axios** or **fetch** (pick one)
+- **ESLint + Prettier** (optional but recommended)
 
 ---
 
@@ -81,26 +79,29 @@ A sleek, performant frontend application for the Tour Guide platform, built with
 ## 📂 Project Structure
 
 ```
+
 tour-guide-frontend/
 ├── node_modules/
 ├── public/
 ├── src/
-│   ├── components/     # Reusable UI components
-│   ├── lib/            # API calls, utility functions
-│   ├── pages/          # Route-level pages
-│   ├── routes/         # Routing setup
-│   ├── store/          # State management (Context or other)
-│   ├── index.css       # Global styles (Tailwind base)
-│   └── main.jsx        # React app entry point
-├── .env                # Environment variables (excluded from Git)
+│ ├── components/ # Reusable UI components
+│ ├── lib/ # API calls, utility functions
+│ ├── pages/ # Route-level pages
+│ ├── routes/ # Routing setup
+│ ├── store/ # State management (Context or other)
+│ ├── index.css # Global styles (Tailwind base)
+│ └── main.jsx # React app entry point
+├── .env # Environment variables (excluded from Git)
 ├── .gitignore
 ├── index.html
 ├── package.json
 ├── postcss.config.js
 ├── tailwind.config.js
 └── vite.config.js
->>>>>>> d334c85bfac9af0b5524b8633441a0b88f80abbe
-```
+
+> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
+
+````
 
 ---
 
@@ -139,7 +140,7 @@ tour-guide-frontend/
 git clone https://github.com/yourusername/tour-guide-frontend.git
 cd tour-guide-frontend
 npm install
-```
+````
 
 ### Environment Variables
 
@@ -267,6 +268,7 @@ Add these scripts if you’re using ESLint/Prettier:
   }
 }
 ```
+
 =======
 Create a `.env` file in the root directory:
 
@@ -283,17 +285,19 @@ npm run dev
 ```
 
 Open your browser at [http://localhost:5173](http://localhost:5173)
->>>>>>> d334c85bfac9af0b5524b8633441a0b88f80abbe
+
+> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
 
 ---
 
 ## 🚀 Deployment
 
 <<<<<<< HEAD
+
 ### Vercel
 
-* Set **Environment Variables** in project settings (`VITE_API_URL`, etc.)
-* SPA fallback handled automatically; ensure framework preset is **Vite**.
+- Set **Environment Variables** in project settings (`VITE_API_URL`, etc.)
+- SPA fallback handled automatically; ensure framework preset is **Vite**.
 
 **Optional `vercel.json`** (only if you need explicit rewrites):
 
@@ -321,34 +325,35 @@ Vite + GH Pages requires base path config and a deploy step. Consider Vercel/Net
 
 ## 🔒 Security Notes
 
-* Never commit real `.env` files — only `.env.example`.
-* Only expose non-sensitive client config via `VITE_*`.
-* Treat access/refresh tokens securely (HTTP-only cookies preferred; if using `localStorage`, understand XSS implications).
+- Never commit real `.env` files — only `.env.example`.
+- Only expose non-sensitive client config via `VITE_*`.
+- Treat access/refresh tokens securely (HTTP-only cookies preferred; if using `localStorage`, understand XSS implications).
 
 ---
 
 ## ♿ Accessibility & ⚡ Performance
 
-* Use semantic HTML and ARIA where needed.
-* Prefer responsive images (`<img srcSet>`/`sizes`), lazy-loading, and code-splitting.
-* Run Lighthouse locally (Chrome DevTools) before deploys.
+- Use semantic HTML and ARIA where needed.
+- Prefer responsive images (`<img srcSet>`/`sizes`), lazy-loading, and code-splitting.
+- Run Lighthouse locally (Chrome DevTools) before deploys.
 
 ---
 
 ## 🧰 Troubleshooting
 
-* **Blank page after deploy**: Add SPA fallback (`_redirects` on Netlify / rewrites on Vercel).
-* **CORS errors**: Allow your frontend origin on the backend (`CORS_ORIGIN`).
-* **Env not read**: Ensure keys begin with `VITE_` and server restarted after changes.
-=======
-This project can be deployed easily on platforms like:
+- **Blank page after deploy**: Add SPA fallback (`_redirects` on Netlify / rewrites on Vercel).
+- **CORS errors**: Allow your frontend origin on the backend (`CORS_ORIGIN`).
+- # **Env not read**: Ensure keys begin with `VITE_` and server restarted after changes.
 
-* **Vercel** ([vercel.com](https://vercel.com))
-* **Netlify** ([netlify.com](https://netlify.com))
-* **GitHub Pages** (with some config)
+  This project can be deployed easily on platforms like:
+
+- **Vercel** ([vercel.com](https://vercel.com))
+- **Netlify** ([netlify.com](https://netlify.com))
+- **GitHub Pages** (with some config)
 
 Ensure the correct API URL is set in environment variables on the deployment platform.
->>>>>>> d334c85bfac9af0b5524b8633441a0b88f80abbe
+
+> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
 
 ---
 
@@ -363,7 +368,7 @@ MIT License
 <<<<<<< HEAD
 **Your Name** — [GitHub](https://github.com/santu-03) · [LinkedIn](https://www.linkedin.com/in/santu-pramanik-03sp/)
 
-
 =======
 **Your Name** — [GitHub](https://github.com/santu-03) | [LinkedIn](https://www.linkedin.com/public-profile/settings?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact-info%3Bhf66C57xTt%2BGJcIYwt%2FTKw%3D%3D)
->>>>>>> d334c85bfac9af0b5524b8633441a0b88f80abbe
+
+> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
