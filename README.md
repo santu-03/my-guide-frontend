@@ -70,7 +70,6 @@ tour-guide-frontend/
 
 ### Installation
 
-> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
 
 ```bash
 git clone https://github.com/yourusername/tour-guide-frontend.git
@@ -199,7 +198,6 @@ Add these scripts if you’re using ESLint/Prettier:
 }
 ```
 
-=======
 Create a `.env` file in the root directory:
 
 ```
@@ -216,13 +214,11 @@ npm run dev
 
 Open your browser at [http://localhost:5173](http://localhost:5173)
 
-> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
+
 
 ---
 
 ## 🚀 Deployment
-
-<<<<<<< HEAD
 
 ### Vercel
 
@@ -267,7 +263,6 @@ Vite + GH Pages requires base path config and a deploy step. Consider Vercel/Net
 - Prefer responsive images (`<img srcSet>`/`sizes`), lazy-loading, and code-splitting.
 - Run Lighthouse locally (Chrome DevTools) before deploys.
 
----
 
 ## 🧰 Troubleshooting
 
@@ -283,7 +278,6 @@ Vite + GH Pages requires base path config and a deploy step. Consider Vercel/Net
 
 Ensure the correct API URL is set in environment variables on the deployment platform.
 
-> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
 
 ---
 
@@ -295,10 +289,8 @@ MIT License
 
 ## 👤 Author
 
-<<<<<<< HEAD
 **Your Name** — [GitHub](https://github.com/santu-03) · [LinkedIn](https://www.linkedin.com/in/santu-pramanik-03sp/)
 
-=======
+
 **Your Name** — [GitHub](https://github.com/santu-03) | [LinkedIn](https://www.linkedin.com/public-profile/settings?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact-info%3Bhf66C57xTt%2BGJcIYwt%2FTKw%3D%3D)
 
-> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
