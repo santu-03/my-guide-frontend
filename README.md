@@ -30,6 +30,7 @@ A sleek, performant SPA for discovering tours, booking trips, and managing profi
 
 ## 📁 Project Structure
 
+```
 tour-guide-frontend/
 ├─ public/ # Static assets
 ├─ src/
@@ -51,6 +52,7 @@ tour-guide-frontend/
 ├─ postcss.config.js
 ├─ tailwind.config.js
 └─ vite.config.js
+```
 
 ## 🛠️ Technologies Used
 
