@@ -9,8 +9,6 @@ A sleek, performant SPA for discovering tours, booking trips, and managing profi
   <a href="#"><img alt="License" src="https://img.shields.io/badge/License-MIT-green"></a>
 </p>
 
----
-
 ## ✨ Features
 
 - **Responsive, mobile-first UI** with Tailwind
@@ -21,8 +19,6 @@ A sleek, performant SPA for discovering tours, booking trips, and managing profi
 - **API integration** with fetch/Axios, token handling, error boundaries
 - **Production-friendly** SPA fallback configs for Vercel/Netlify
 
----
-
 ## 🧱 Tech Stack
 
 - **React 18+**
@@ -32,115 +28,55 @@ A sleek, performant SPA for discovering tours, booking trips, and managing profi
 - **Axios** or **fetch** (pick one)
 - **ESLint + Prettier** (optional but recommended)
 
----
-
 ## 📁 Project Structure
 
-```
 tour-guide-frontend/
-├─ public/                     # Static assets
+├─ public/ # Static assets
 ├─ src/
-│  ├─ components/              # Reusable UI building blocks
-│  ├─ lib/                     # API client, helpers, constants
-│  │   ├─ api.js               # Axios/fetch wrapper
-│  │   └─ storage.js           # token helpers (get/set/remove)
-│  ├─ pages/                   # Route-level pages
-│  ├─ routes/                  # Router config
-│  │   └─ index.jsx
-│  ├─ store/                   # Context/Reducer/Zustand (optional)
-│  ├─ styles/                  # Tailwind layers, globals (optional)
-│  ├─ index.css                # Tailwind base/components/utilities
-│  └─ main.jsx                 # React entry
-├─ .env                        # NOT committed (use .env.example)
+│ ├─ components/ # Reusable UI building blocks
+│ ├─ lib/ # API client, helpers, constants
+│ │ ├─ api.js # Axios/fetch wrapper
+│ │ └─ storage.js # token helpers (get/set/remove)
+│ ├─ pages/ # Route-level pages
+│ ├─ routes/ # Router config
+│ │ └─ index.jsx
+│ ├─ store/ # Context/Reducer/Zustand (optional)
+│ ├─ styles/ # Tailwind layers, globals (optional)
+│ ├─ index.css # Tailwind base/components/utilities
+│ └─ main.jsx # React entry
+├─ .env # NOT committed (use .env.example)
 ├─ .gitignore
 ├─ index.html
 ├─ package.json
 ├─ postcss.config.js
 ├─ tailwind.config.js
 └─ vite.config.js
-=======
-# 🧭 Tour Guide Frontend
 
-A sleek, performant frontend application for the Tour Guide platform, built with **React**, **Vite**, and **Tailwind CSS**. This SPA provides an intuitive interface for exploring tours, booking trips, and managing user profiles.
-
----
-
-## 🚀 Key Features
-
-* Responsive, mobile-first UI using **Tailwind CSS**
-* Fast development and optimized builds with **Vite**
-* Component-driven architecture with reusable **React** components
-* Client-side routing via **React Router**
-* Environment variables support via `.env`
-* Seamless integration with backend API for dynamic data fetching
-
----
-
-## 📂 Project Structure
-
-```
-
-tour-guide-frontend/
-├── node_modules/
-├── public/
-├── src/
-│ ├── components/ # Reusable UI components
-│ ├── lib/ # API calls, utility functions
-│ ├── pages/ # Route-level pages
-│ ├── routes/ # Routing setup
-│ ├── store/ # State management (Context or other)
-│ ├── index.css # Global styles (Tailwind base)
-│ └── main.jsx # React app entry point
-├── .env # Environment variables (excluded from Git)
-├── .gitignore
-├── index.html
-├── package.json
-├── postcss.config.js
-├── tailwind.config.js
-└── vite.config.js
-
-> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
-
-````
-
----
-
-<<<<<<< HEAD
-## 🔧 Getting Started
-
-### Prerequisites
-
-* **Node.js v18+** (recommended)
-* Backend API base URL
-
-### Install
-=======
 ## 🛠️ Technologies Used
 
-* **React** — Frontend UI library
-* **Vite** — Next-generation frontend tooling & bundler
-* **Tailwind CSS** — Utility-first CSS framework
-* **React Router** — Client-side routing
-* **Axios or fetch** — API communication (adjust as needed)
-* **ESLint + Prettier** — Code quality and formatting (optional)
-
----
+- **React** — Frontend UI library
+- **Vite** — Next-generation frontend tooling & bundler
+- **Tailwind CSS** — Utility-first CSS framework
+- **React Router** — Client-side routing
+- **Axios or fetch** — API communication (adjust as needed)
+- **ESLint + Prettier** — Code quality and formatting (optional)
 
 ## ⚡ Getting Started
 
 ### Prerequisites
 
-* Node.js v16+
-* Backend API URL (deployed or local)
+- Node.js v16+
+- Backend API URL (deployed or local)
 
 ### Installation
->>>>>>> d334c85bfac9af0b5524b8633441a0b88f80abbe
+
+> > > > > > > d334c85bfac9af0b5524b8633441a0b88f80abbe
 
 ```bash
 git clone https://github.com/yourusername/tour-guide-frontend.git
 cd tour-guide-frontend
 npm install
-````
+```
 
 ### Environment Variables
 
@@ -159,19 +95,17 @@ VITE_API_URL=https://your-backend-api-url.com
 
 ### Run (Dev)
 
-```bash
+````bash
 npm run dev
 # App: http://localhost:5173
-```
+
 
 ### Build (Prod)
 
 ```bash
 npm run build
 npm run preview   # serves dist/ locally for testing
-```
-
----
+````
 
 ## 🧭 Routing
 
@@ -200,8 +134,6 @@ export const router = createBrowserRouter([
   },
 ]);
 ```
-
----
 
 ## 🌐 API Client (example)
 
@@ -250,8 +182,6 @@ Usage:
 import api from "@/lib/api";
 const tours = await api.get("/api/places?limit=12");
 ```
-
----
 
 ## 🧹 Code Quality (optional)
 
