@@ -31,27 +31,63 @@ A sleek, performant SPA for discovering tours, booking trips, and managing profi
 ## 📁 Project Structure
 
 ```
-tour-guide-frontend/
-├─ public/ # Static assets
-├─ src/
-│ ├─ components/ # Reusable UI building blocks
-│ ├─ lib/ # API client, helpers, constants
-│ │ ├─ api.js # Axios/fetch wrapper
-│ │ └─ storage.js # token helpers (get/set/remove)
-│ ├─ pages/ # Route-level pages
-│ ├─ routes/ # Router config
-│ │ └─ index.jsx
-│ ├─ store/ # Context/Reducer/Zustand (optional)
-│ ├─ styles/ # Tailwind layers, globals (optional)
-│ ├─ index.css # Tailwind base/components/utilities
-│ └─ main.jsx # React entry
-├─ .env # NOT committed (use .env.example)
-├─ .gitignore
-├─ index.html
-├─ package.json
-├─ postcss.config.js
-├─ tailwind.config.js
-└─ vite.config.js
+Directory structure:
+└──tour-guide-frontend/
+    ├── README.md
+    ├── index.html
+    ├── package.json
+    ├── postcss.config.js
+    ├── tailwind.config.js
+    ├── vite.config.js
+    └── src/
+        ├── index.css
+        ├── main.jsx
+        ├── components/
+        │   ├── Layout/
+        │   │   ├── DashboardLayout.jsx
+        │   │   ├── Footer.jsx
+        │   │   ├── Header.jsx
+        │   │   ├── Layout.jsx
+        │   │   ├── Sidebar.jsx
+        │   │   └── StatCard.jsx
+        │   └── ui/
+        │       ├── Button.jsx
+        │       ├── Card.jsx
+        │       ├── LoadingSkeleton.jsx
+        │       └── Modal.jsx
+        ├── lib/
+        │   ├── activities.js
+        │   ├── api.js
+        │   ├── media.js
+        │   ├── places.js
+        │   └── socket.js
+        ├── pages/
+        │   ├── admin/
+        │   │   ├── ActivityCreate.jsx
+        │   │   ├── ActivityList.jsx
+        │   │   ├── AdminDashboard.jsx
+        │   │   ├── PlaceCreate.jsx
+        │   │   └── PlaceList.jsx
+        │   ├── auth/
+        │   │   ├── Login.jsx
+        │   │   └── Signup.jsx
+        │   ├── dashboards/
+        │   │   ├── AdvisorDashboard.jsx
+        │   │   ├── GuideDashboard.jsx
+        │   │   ├── InstructorDashboard.jsx
+        │   │   └── TravellerDashboard.jsx
+        │   └── public/
+        │       ├── ActivityDetail.jsx
+        │       └── PlaceDetail.jsx
+        ├── routes/
+        │   ├── ProtectedRoute.jsx
+        │   ├── RoleGate.jsx
+        │   └── Router.jsx
+        └── store/
+            ├── auth.js
+            ├── bookings.js
+            └── ui.js
+
 ```
 
 ## 🛠️ Technologies Used
@@ -71,7 +107,6 @@ tour-guide-frontend/
 - Backend API URL (deployed or local)
 
 ### Installation
-
 
 ```bash
 git clone https://github.com/yourusername/tour-guide-frontend.git
@@ -216,8 +251,6 @@ npm run dev
 
 Open your browser at [http://localhost:5173](http://localhost:5173)
 
-
-
 ---
 
 ## 🚀 Deployment
@@ -265,7 +298,6 @@ Vite + GH Pages requires base path config and a deploy step. Consider Vercel/Net
 - Prefer responsive images (`<img srcSet>`/`sizes`), lazy-loading, and code-splitting.
 - Run Lighthouse locally (Chrome DevTools) before deploys.
 
-
 ## 🧰 Troubleshooting
 
 - **Blank page after deploy**: Add SPA fallback (`_redirects` on Netlify / rewrites on Vercel).
@@ -280,7 +312,6 @@ Vite + GH Pages requires base path config and a deploy step. Consider Vercel/Net
 
 Ensure the correct API URL is set in environment variables on the deployment platform.
 
-
 ---
 
 ## 📄 License
@@ -293,6 +324,4 @@ MIT License
 
 **Your Name** — [GitHub](https://github.com/santu-03) · [LinkedIn](https://www.linkedin.com/in/santu-pramanik-03sp/)
 
-
 **Your Name** — [GitHub](https://github.com/santu-03) | [LinkedIn](https://www.linkedin.com/public-profile/settings?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact-info%3Bhf66C57xTt%2BGJcIYwt%2FTKw%3D%3D)
-
