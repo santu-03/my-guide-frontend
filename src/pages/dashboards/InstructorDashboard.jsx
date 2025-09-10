@@ -1,122 +1,53 @@
-// // import React from 'react';
-// // import { Link } from 'react-router-dom';
-// // import { Calendar, ClipboardList, Users } from 'lucide-react';
-// // import Button from '@/components/ui/Button';
-// // import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-
-// // export default function InstructorDashboard() {
-// //   const sessions = [
-// //     { id: 's1', title: 'Beginner Photography Walk', date: '2025-09-18', enrolled: 5 },
-// //     { id: 's2', title: 'City Cycling Basics', date: '2025-09-24', enrolled: 8 },
-// //   ];
-
-// //   return (
-// //     <div className="max-w-7xl mx-auto p-6 space-y-8">
-// //       <header className="flex items-center justify-between">
-// //         <div>
-// //           <h1 className="text-2xl font-bold">Instructor Dashboard</h1>
-// //           <p className="text-gray-600 dark:text-gray-400">Manage activities and upcoming sessions.</p>
-// //         </div>
-// //         <div className="flex gap-3">
-// //           <Button as={Link} to="/activities/new">
-// //             <ClipboardList className="h-4 w-4 mr-2" /> New Activity
-// //           </Button>
-// //           <Button as={Link} to="/calendar" variant="secondary">
-// //             <Calendar className="h-4 w-4 mr-2" /> Calendar
-// //           </Button>
-// //         </div>
-// //       </header>
-
-// //       <Card>
-// //         <CardHeader className="font-semibold">Upcoming Sessions</CardHeader>
-// //         <CardContent className="space-y-3">
-// //           {sessions.map((s) => (
-// //             <div key={s.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-// //               <div>
-// //                 <div className="font-semibold">{s.title}</div>
-// //                 <div className="text-sm text-gray-600 dark:text-gray-400">{s.date}</div>
-// //               </div>
-// //               <div className="inline-flex items-center gap-2 text-sm">
-// //                 <Users className="h-4 w-4" /> {s.enrolled} enrolled
-// //               </div>
-// //             </div>
-// //           ))}
-// //           {sessions.length === 0 && (
-// //             <div className="text-sm text-gray-500">No sessions scheduled.</div>
-// //           )}
-// //         </CardContent>
-// //       </Card>
-// //     </div>
-// //   );
-// // }
-// import React from "react";
-// import { ClipboardList, Calendar, Users, ThumbsUp } from "lucide-react";
-// import Sidebar from "@/components/Layout/Sidebar";
-// import StatCard from "@/components/Layout/StatCard";
-
-// export default function InstructorDashboard() {
-//   const links = [
-//     { to: "/instructor/activities", label: "Activities", icon: ClipboardList },
-//     { to: "/instructor/calendar", label: "Calendar", icon: Calendar },
-//   ];
-
-//   const kpis = [
-//     { icon: ClipboardList, label: "Total Activities", value: "32", color: "primary" },
-//     { icon: Calendar, label: "Upcoming Sessions", value: "7", color: "blue" },
-//     { icon: Users, label: "Enrolled Users", value: "240", color: "green" },
-//     { icon: ThumbsUp, label: "Avg Feedback", value: "4.6/5", color: "purple" },
-//   ];
-
-//   return (
-//     <div className="flex">
-//       <Sidebar links={links} />
-//       <main className="flex-1 p-6 md:p-8 bg-gray-50 dark:bg-gray-900">
-//         <h1 className="text-2xl font-bold mb-6">Instructor Dashboard</h1>
-//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-//           {kpis.map((k) => <StatCard key={k.label} {...k} />)}
-//         </div>
-//       </main>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-// InstructorDashboard.jsx
-import React from "react";
-import { ClipboardList, Calendar, Users, ThumbsUp } from "lucide-react";
-import Sidebar from "@/components/Layout/Sidebar";
+import React, { useMemo } from "react";
+import DashboardLayout from "@/components/Layout/DashboardLayout";
 import StatCard from "@/components/Layout/StatCard";
+import { ClipboardList, Calendar, Users, ThumbsUp, BookOpen } from "lucide-react";
+
+const sessions = [
+  { id: "s1", title: "Beginner Photography Walk", date: "2025-09-18", enrolled: 5 },
+  { id: "s2", title: "City Cycling Basics", date: "2025-09-24", enrolled: 8 },
+  { id: "s3", title: "Weekend Kayaking 101", date: "2025-10-02", enrolled: 10 },
+];
 
 export default function InstructorDashboard() {
-  const links = [
-    { to: "/instructor/activities", label: "Activities", icon: ClipboardList },
-    { to: "/instructor/calendar", label: "Calendar", icon: Calendar },
-  ];
+  const user = { name: "Instructor User", role: "instructor", avatar: "/default-avatar.png" };
 
-  const kpis = [
-    { icon: ClipboardList, label: "Total Activities", value: "32", color: "primary" },
-    { icon: Calendar, label: "Upcoming Sessions", value: "7", color: "blue" },
-    { icon: Users, label: "Enrolled Users", value: "240", color: "green" },
-    { icon: ThumbsUp, label: "Avg Feedback", value: "4.6/5", color: "purple" },
-  ];
+  const metrics = useMemo(
+    () => [
+      { icon: ClipboardList, label: "Total Activities", value: "32" },
+      { icon: Calendar,      label: "Upcoming Sessions", value: "7", subtle: true },
+      { icon: Users,         label: "Enrolled Users", value: "240", trend: { direction: "up", value: "+12%" } },
+      { icon: ThumbsUp,      label: "Avg Feedback", value: "4.6 / 5" },
+    ],
+    []
+  );
 
   return (
-    <div className="flex">
-      <Sidebar links={links} />
-      <main className="flex-1 p-6 md:p-8 bg-gray-50 dark:bg-gray-900">
-        <h1 className="text-2xl font-bold mb-6">Instructor Dashboard</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {kpis.map((k) => <StatCard key={k.label} {...k} />)}
-        </div>
-      </main>
-    </div>
+    <DashboardLayout role="instructor" title="Home" user={user}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        {metrics.map((m, i) => <StatCard key={i} {...m} />)}
+      </div>
+
+      <section className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-800/70 p-5">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 inline-flex items-center gap-2">
+          <BookOpen className="h-5 w-5" /> Upcoming Sessions
+        </h2>
+        {sessions.length ? (
+          <ul className="divide-y divide-gray-100 dark:divide-gray-700">
+            {sessions.map((s) => (
+              <li key={s.id} className="py-4 flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-gray-900 dark:text-white">{s.title}</div>
+                  <div className="text-xs text-gray-500">{new Date(s.date).toLocaleDateString()}</div>
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">{s.enrolled} enrolled</div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="text-sm text-gray-500">No sessions scheduled.</div>
+        )}
+      </section>
+    </DashboardLayout>
   );
 }

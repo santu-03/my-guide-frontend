@@ -1308,6 +1308,54 @@ const EmptySearchResults = ({ query, onClearFilters, hasActiveFilters }) => (
 );
 
 // Helpers
+
+
+
+// const getCategoryEmoji = (category) => {
+//   const emojiMap = {
+//     cultural: '🏛️',
+//     food: '🍽️',
+//     adventure: '🏔️',
+//     nature: '🌿',
+//     art: '🎨',
+//     entertainment: '🎭',
+//     default: '📸',
+//   };
+//   return emojiMap[String(category || '').toLowerCase()] || emojiMap.default;
+// };
+const places = [
+  { name: 'Victoria Memorial', category: 'cultural' },
+  { name: 'Howrah Bridge', category: 'cultural' },
+  { name: 'Prinsep Ghat', category: 'nature' },
+  { name: 'Marble Palace', category: 'art' },
+  { name: 'Jorasanko Thakur Bari', category: 'cultural' },
+  { name: 'Indian Museum', category: 'art' },
+  { name: 'Metropolitan Building', category: 'cultural' },
+  { name: 'St. Paul’s Cathedral', category: 'cultural' },
+  { name: 'Town Hall', category: 'cultural' },
+  { name: 'Writers’ Building', category: 'cultural' },
+  { name: 'Dakshineswar Kali Temple', category: 'spiritual' },
+  { name: 'Belur Math', category: 'spiritual' },
+  { name: 'Kalighat Temple', category: 'spiritual' },
+  { name: 'Pareshnath Jain Temple', category: 'spiritual' },
+  { name: 'Armenian Church of Nazareth', category: 'spiritual' },
+  { name: 'Academy of Fine Arts', category: 'art' },
+  { name: 'Nandan & Rabindra Sadan', category: 'entertainment' },
+  { name: 'Birla Planetarium', category: 'entertainment' },
+  { name: 'Science City', category: 'entertainment' },
+  { name: 'Kolkata Tram Ride', category: 'adventure' },
+  { name: 'Maidan', category: 'nature' },
+  { name: 'Botanical Garden (Shibpur)', category: 'nature' },
+  { name: 'Alipore Zoo', category: 'nature' },
+  { name: 'Eco Park (New Town)', category: 'nature' },
+  { name: 'Nicco Park', category: 'entertainment' },
+  { name: 'College Street', category: 'cultural' },
+  { name: 'New Market', category: 'shopping' },
+  { name: 'Park Street', category: 'food' },
+  { name: 'Burrabazar', category: 'shopping' },
+  { name: 'Chinatown (Tiretta Bazaar & Tangra)', category: 'food' },
+];
+
 const getCategoryEmoji = (category) => {
   const emojiMap = {
     cultural: '🏛️',
@@ -1316,9 +1364,24 @@ const getCategoryEmoji = (category) => {
     nature: '🌿',
     art: '🎨',
     entertainment: '🎭',
+    spiritual: '🙏',
+    shopping: '🛍️',
     default: '📸',
   };
   return emojiMap[String(category || '').toLowerCase()] || emojiMap.default;
 };
+
+// Add emojis to each place
+const placesWithEmoji = places.map(place => ({
+  ...place,
+  emoji: getCategoryEmoji(place.category)
+}));
+
+console.log(placesWithEmoji);
+
+
+
+
+
 
 export default Search;

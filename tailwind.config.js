@@ -1,12 +1,19 @@
 /** @type {import('tailwindcss').Config} */
+import colors from 'tailwindcss/colors';
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: { 50:'#eff6ff', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 900:'#1e3a8a' },
-        secondary: { 50:'#f0fdf4', 500:'#22c55e', 600:'#16a34a', 700:'#15803d' }
+        primary: colors.violet,
+        secondary: colors.emerald,
+        glass: "rgba(255, 255, 255, 0.1)",   // 👈 custom transparent white
+        darkGlass: "rgba(0, 0, 0, 0.3)",     // 👈 custom transparent black
+      },
+      backdropBlur: {
+        xs: '2px',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
