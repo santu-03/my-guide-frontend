@@ -152,6 +152,14 @@
 
 // export default Login;
 
+
+
+
+
+
+
+
+// update 2
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -260,7 +268,7 @@ const Login = () => {
   const role = result.user.role;
   switch (role) {
     case "admin":
-      navigate("/dashboard/admin", { replace: true });
+      navigate('/dashboard/admin', { replace: true });
       break;
     case "advisor":
       navigate("/dashboard/advisor", { replace: true });

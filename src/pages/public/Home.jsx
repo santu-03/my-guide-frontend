@@ -1020,8 +1020,8 @@ export default function Home(){
     setLoading(true);
     try{
       const [placesRes, activitiesRes] = await Promise.all([
-        api.get('/places?featured=true&limit=6', { silenceToast:true }),
-        api.get('/activities?featured=true&isPublished=true&limit=8', { silenceToast:true }),
+        // api.get('/places?featured=true&limit=6', { silenceToast:true }),
+        // api.get('/activities?featured=true&isPublished=true&limit=8', { silenceToast:true }),
       ]);
       setContent({
         featuredPlaces: placesRes?.data?.data || [],
