@@ -2,24 +2,29 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth';
 
 const ProtectedRoute = ({ children }) => {
-  // 🔧 Development bypass - set to true to disable protection
-  const DEV_BYPASS = true;
+  // 🔧 Development bypass - set to false to enable protection
+  const DEV_BYPASS = process.env.NODE_ENV === 'development';
   
+  const { isAuthenticated, user, isLoading } = useAuthStore();
+  const location = useLocation();
+
+  // In development, bypass protection
   if (DEV_BYPASS) {
     return children || <Outlet />;
   }
 
-  const { isAuthenticated, isLoading } = useAuthStore((state) => ({
-    isAuthenticated: state.isAuthenticated,
-    isLoading: state.isLoading,
-  }));
-  const location = useLocation();
-
+  // Show loading state while auth is being determined
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <span className="ml-2 text-gray-600">Loading...</span>
+      </div>
+    );
   }
 
-  if (!isAuthenticated) {
+  // Redirect to login if not authenticated
+  if (!isAuthenticated || !user) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
