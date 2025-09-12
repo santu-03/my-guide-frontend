@@ -469,19 +469,19 @@ const SEED_SUGGESTIONS = Object.freeze([
 ]);
 
 const MOCK_NOTIFICATIONS = Object.freeze([
-  { 
-    id: 1, 
-    title: "Booking Confirmed", 
-    message: "Your Rome City Tour is confirmed for tomorrow", 
-    time: "2h ago", 
-    unread: true 
+  {
+    id: 1,
+    title: "Booking Confirmed",
+    message: "Your Rome City Tour is confirmed for tomorrow",
+    time: "2h ago",
+    unread: true
   },
-  { 
-    id: 2, 
-    title: "Tour Reminder", 
-    message: "Your Florence Food Tour starts in 1 hour", 
-    time: "1d ago", 
-    unread: false 
+  {
+    id: 2,
+    title: "Tour Reminder",
+    message: "Your Florence Food Tour starts in 1 hour",
+    time: "1d ago",
+    unread: false
   },
 ]);
 
@@ -508,8 +508,8 @@ function useRecentSearches() {
     try {
       const r = JSON.parse(localStorage.getItem(RECENTS_KEY) || "[]");
       return Array.isArray(r) ? r.slice(0, MAX_RECENTS) : [];
-    } catch { 
-      return []; 
+    } catch {
+      return [];
     }
   });
 
@@ -541,17 +541,17 @@ function useDebounce(value, delay) {
 }
 
 // Components
-function SearchSuggestions({ 
-  show, 
-  searchQuery, 
-  recents, 
-  onSelect, 
+function SearchSuggestions({
+  show,
+  searchQuery,
+  recents,
+  onSelect,
   onClearRecents,
   activeIndex,
-  onSetActiveIndex 
+  onSetActiveIndex
 }) {
   const debouncedQuery = useDebounce(searchQuery, 150);
-  
+
   const filteredSuggestions = useMemo(() => {
     const q = debouncedQuery.toLowerCase();
     if (!q) return [];
@@ -647,8 +647,8 @@ function NotificationDropdown({ show, notifications }) {
       </div>
       <div className="max-h-96 overflow-y-auto">
         {notifications.map((notification) => (
-          <div 
-            key={notification.id} 
+          <div
+            key={notification.id}
             className={`p-4 border-b dark:border-gray-700 last:border-none transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50
               ${notification.unread ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
           >
@@ -677,18 +677,18 @@ function UserMenu({ show, user, onLogout, onClose }) {
         <div className="font-semibold text-gray-900 dark:text-white">{user?.name}</div>
         <div className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</div>
       </div>
-      
+
       <div className="py-2">
-        <Link 
-          to="/profile" 
+        <Link
+          to="/profile"
           className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           onClick={onClose}
         >
           Profile
         </Link>
         {user?.role && ROLE_TO_DASHBOARD[user.role] && (
-          <Link 
-            to={ROLE_TO_DASHBOARD[user.role]} 
+          <Link
+            to={ROLE_TO_DASHBOARD[user.role]}
             className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             onClick={onClose}
           >
@@ -696,7 +696,7 @@ function UserMenu({ show, user, onLogout, onClose }) {
           </Link>
         )}
       </div>
-      
+
       <div className="border-t border-gray-200 dark:border-gray-700">
         <button
           onClick={() => { onLogout(); onClose(); }}
@@ -743,7 +743,7 @@ function Header() {
 
   useEffect(() => {
     if (!(showUserMenu || showNotifications || showSuggestions)) return;
-    
+
     const handleClickOutside = (e) => {
       if (
         !userMenuRef.current?.contains(e.target) &&
@@ -763,7 +763,7 @@ function Header() {
 
     document.addEventListener("pointerdown", handleClickOutside, { passive: true });
     document.addEventListener("keydown", handleKeyDown);
-    
+
     return () => {
       document.removeEventListener("pointerdown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
@@ -774,7 +774,7 @@ function Header() {
   const navigateSearch = useCallback((value) => {
     const query = value?.trim();
     if (!query) return;
-    
+
     setSearchQuery?.(query);
     saveRecent(query);
     setShowSuggestions(false);
@@ -810,10 +810,10 @@ function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/10 dark:bg-gray-900/70  border-gray-200 dark:border-gray-700 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          
+
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group" aria-label="Go to home">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
@@ -824,12 +824,24 @@ function Header() {
             </span>
           </Link>
 
+          {/* Logo */}
+          {/* <Link to="/" className="flex items-center space-x-3 group" aria-label="Go to home">
+            <img
+              src="/images/LOGO.png"   
+              alt="TourGuide Logo"
+              className="w-40 h-auto  group-hover:scale-105 transition-transform"
+            />
+            
+          </Link> */}
+
+
+
           {/* Search (desktop) */}
           <div ref={searchWrapRef} className="hidden md:flex flex-1 max-w-lg mx-8 relative">
-            <form 
-              className="w-full relative" 
+            <form
+              className="w-full relative"
               onSubmit={handleSearchSubmit}
-              role="search" 
+              role="search"
               aria-label="Site search"
             >
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
@@ -858,7 +870,7 @@ function Header() {
 
           {/* Right actions */}
           <div className="flex items-center space-x-3 sm:space-x-4">
-            
+
             {/* Theme toggle */}
             <button
               onClick={() => setDarkMode(prev => !prev)}
@@ -867,9 +879,8 @@ function Header() {
               type="button"
             >
               <span className="flex items-center justify-between w-[72px] h-9 rounded-full bg-white/80 dark:bg-gray-900/80 backdrop-blur px-1.5 relative">
-                <span className={`absolute top-1 left-1 h-7 w-7 rounded-full bg-white dark:bg-gray-700 shadow-lg transition-transform duration-300 ${
-                  darkMode ? "translate-x-[2.25rem]" : ""
-                }`} />
+                <span className={`absolute top-1 left-1 h-7 w-7 rounded-full bg-white dark:bg-gray-700 shadow-lg transition-transform duration-300 ${darkMode ? "translate-x-[2.25rem]" : ""
+                  }`} />
                 <Sun className={`h-4 w-4 z-10 transition-opacity ${darkMode ? "opacity-60" : "opacity-100"}`} />
                 <Moon className={`h-4 w-4 z-10 transition-opacity ${darkMode ? "opacity-100" : "opacity-60"}`} />
               </span>
@@ -892,7 +903,7 @@ function Header() {
                   )}
                 </button>
 
-                <NotificationDropdown 
+                <NotificationDropdown
                   show={showNotifications}
                   notifications={MOCK_NOTIFICATIONS}
                 />
@@ -911,9 +922,8 @@ function Header() {
                   <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white font-semibold">
                     {user?.name?.charAt(0)?.toUpperCase() || "U"}
                   </div>
-                  <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${
-                    showUserMenu ? "rotate-180" : ""
-                  }`} />
+                  <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${showUserMenu ? "rotate-180" : ""
+                    }`} />
                 </button>
 
                 <UserMenu
