@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { useAuthStore } from '@/store/auth';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+const VITE_SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
 class SocketService {
   constructor() {
@@ -17,7 +17,7 @@ class SocketService {
       return;
     }
 
-    this.socket = io(SOCKET_URL, {
+    this.socket = io(VITE_SOCKET_URL, {
       auth: { token },
       transports: ['websocket', 'polling']
     });

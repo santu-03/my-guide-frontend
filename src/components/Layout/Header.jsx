@@ -815,24 +815,27 @@ function Header() {
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group" aria-label="Go to home">
+          {/* <Link to="/" className="flex items-center space-x-3 group" aria-label="Go to home">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
               <span className="text-white font-bold text-lg">TG</span>
             </div>
             <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">
               TourGuide
             </span>
-          </Link>
+          </Link> */}
 
           {/* Logo */}
-          {/* <Link to="/" className="flex items-center space-x-3 group" aria-label="Go to home">
+          <Link to="/" className="flex items-center space-x-3 group" aria-label="Go to home">
             <img
-              src="/images/LOGO.png"   
+              src="/images/LOGO2.png"   
               alt="TourGuide Logo"
-              className="w-40 h-auto  group-hover:scale-105 transition-transform"
+              className="w-12 h-auto  group-hover:scale-105 transition-transform"
             />
+            <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">
+              TourGuide
+            </span>
             
-          </Link> */}
+          </Link>
 
 
 

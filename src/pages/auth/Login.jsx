@@ -1150,9 +1150,14 @@ const Login = () => {
           {/* Header */}
           <div className="text-center">
             <Link to="/" className="inline-flex items-center space-x-3 mb-8 group">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+              {/* <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                 <span className="text-white font-bold text-xl">TG</span>
-              </div>
+              </div> */}
+              <img
+              src="/images/LOGO2.png"   
+              alt="TourGuide Logo"
+              className="w-12 h-auto  group-hover:scale-105 transition-transform"
+            />
               <span className="font-bold text-2xl text-gray-900 dark:text-white">TourGuide</span>
             </Link>
 

@@ -59,8 +59,8 @@ const ROLE_CONFIG = [
 
 // Static Tailwind maps (avoid dynamic class strings that JIT may purge)
 const THEME = {
-  blue:   { border: 'border-blue-500',   bg: 'bg-blue-50 dark:bg-blue-900/20',     iconBg: 'bg-blue-500',   text: 'text-blue-500',   dotBg: 'bg-blue-500' },
-  green:  { border: 'border-green-500',  bg: 'bg-green-50 dark:bg-green-900/20',   iconBg: 'bg-green-500',  text: 'text-green-500',  dotBg: 'bg-green-500' },
+  blue: { border: 'border-blue-500', bg: 'bg-blue-50 dark:bg-blue-900/20', iconBg: 'bg-blue-500', text: 'text-blue-500', dotBg: 'bg-blue-500' },
+  green: { border: 'border-green-500', bg: 'bg-green-50 dark:bg-green-900/20', iconBg: 'bg-green-500', text: 'text-green-500', dotBg: 'bg-green-500' },
   purple: { border: 'border-purple-500', bg: 'bg-purple-50 dark:bg-purple-900/20', iconBg: 'bg-purple-500', text: 'text-purple-500', dotBg: 'bg-purple-500' },
   orange: { border: 'border-orange-500', bg: 'bg-orange-50 dark:bg-orange-900/20', iconBg: 'bg-orange-500', text: 'text-orange-500', dotBg: 'bg-orange-500' }
 };
@@ -205,28 +205,28 @@ const Signup = () => {
         role: formData.role
       });
 
-     if (result.success) {
-  toast.success(`Welcome to TourGuide, ${result.user.name}!`);
-  const role = result.user.role;
-  switch (role) {
-    case "admin":
-      navigate("/dashboard/admin");
-      break;
-    case "advisor":
-      navigate("/dashboard/advisor");
-      break;
-    case "guide":
-      navigate("/dashboard/guide");
-      break;
-    case "instructor":
-      navigate("/dashboard/instructor");
-      break;
-    case "traveller":
-    default:
-      navigate("/"); // homepage only
-      break;
-  }
-}
+      if (result.success) {
+        toast.success(`Welcome to TourGuide, ${result.user.name}!`);
+        const role = result.user.role;
+        switch (role) {
+          case "admin":
+            navigate("/dashboard/admin");
+            break;
+          case "advisor":
+            navigate("/dashboard/advisor");
+            break;
+          case "guide":
+            navigate("/dashboard/guide");
+            break;
+          case "instructor":
+            navigate("/dashboard/instructor");
+            break;
+          case "traveller":
+          default:
+            navigate("/"); // homepage only
+            break;
+        }
+      }
     } catch (error) {
       console.error('Signup error:', error);
     }
@@ -277,17 +277,15 @@ const Signup = () => {
             <div
               key={role.value}
               onClick={() => setFormData(prev => ({ ...prev, role: role.value }))}
-              className={`relative cursor-pointer rounded-xl border-2 p-4 sm:p-5 transition-all hover:shadow-md ${
-                isSelected
+              className={`relative cursor-pointer rounded-xl border-2 p-4 sm:p-5 transition-all hover:shadow-md ${isSelected
                   ? `${theme.border} ${theme.bg}`
                   : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
-              }`}
+                }`}
             >
               <div className="flex items-start space-x-3">
                 <div
-                  className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${
-                    isSelected ? theme.iconBg : 'bg-gray-100 dark:bg-gray-700'
-                  }`}
+                  className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${isSelected ? theme.iconBg : 'bg-gray-100 dark:bg-gray-700'
+                    }`}
                 >
                   <Icon className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-gray-600 dark:text-gray-400'}`} />
                 </div>
@@ -311,9 +309,8 @@ const Signup = () => {
                 </div>
 
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    isSelected ? theme.border : 'border-gray-300'
-                  } bg-white`}
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? theme.border : 'border-gray-300'
+                    } bg-white`}
                 >
                   {isSelected && <div className={`w-2 h-2 rounded-full ${theme.dotBg}`} />}
                 </div>
@@ -363,8 +360,7 @@ const Signup = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               className={`bg-white w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                dark:bg-gray-800 dark:text-white transition-colors ${
-                  errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
+                dark:bg-gray-800 dark:text-white transition-colors ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               placeholder="Enter your full name"
               disabled={isLoading}
@@ -394,8 +390,7 @@ const Signup = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               className={`bg-white w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                dark:bg-gray-800 dark:text-white transition-colors ${
-                  errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
+                dark:bg-gray-800 dark:text-white transition-colors ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               placeholder="Enter your email"
               disabled={isLoading}
@@ -425,8 +420,7 @@ const Signup = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               className={`bg-white w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                dark:bg-gray-800 dark:text-white transition-colors ${
-                  errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
+                dark:bg-gray-800 dark:text-white transition-colors ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               placeholder="Create a strong password"
               disabled={isLoading}
@@ -482,8 +476,7 @@ const Signup = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               className={`bg-white w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                dark:bg-gray-800 dark:text-white transition-colors ${
-                  errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
+                dark:bg-gray-800 dark:text-white transition-colors ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               placeholder="Confirm your password"
               disabled={isLoading}
@@ -515,9 +508,8 @@ const Signup = () => {
               type="checkbox"
               checked={formData.agreeToTerms}
               onChange={handleChange}
-              className={`bg-white mt-0.5 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded ${
-                errors.agreeToTerms ? 'border-red-500' : ''
-              }`}
+              className={`bg-white mt-0.5 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded ${errors.agreeToTerms ? 'border-red-500' : ''
+                }`}
               disabled={isLoading}
             />
             <span className="text-sm text-gray-700 dark:text-gray-300">
@@ -591,21 +583,24 @@ const Signup = () => {
               {/* Header */}
               <div className="text-center">
                 <Link to="/" className="inline-flex items-center space-x-3 mb-6 group">
-                  <div className="w-11 h-11 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                  {/* <div className="w-11 h-11 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-white font-bold text-lg">TG</span>
-                  </div>
+                  </div> */}
+                  <img
+                    src="/images/LOGO2.png"
+                    alt="TourGuide Logo"
+                    className="w-12 h-auto  group-hover:scale-105 transition-transform"
+                  />
                   <span className="font-bold text-2xl text-gray-900 dark:text-white">TourGuide</span>
                 </Link>
 
                 {/* Progress (compact) */}
                 <div className="flex items-center justify-center space-x-3 mb-6">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${
-                    step >= 1 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
-                  }`}>1</div>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${step >= 1 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
+                    }`}>1</div>
                   <div className={`w-10 h-0.5 ${step >= 2 ? 'bg-primary-600' : 'bg-gray-200'}`} />
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${
-                    step >= 2 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
-                  }`}>2</div>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${step >= 2 ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
+                    }`}>2</div>
                 </div>
               </div>
 

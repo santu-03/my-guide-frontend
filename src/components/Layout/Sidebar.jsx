@@ -299,9 +299,14 @@ export default function Sidebar({
             }`}
             onClick={() => setIsOpen(false)}
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white shadow-lg">
+            {/* <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white shadow-lg">
               <span className="font-extrabold">TG</span>
-            </div>
+            </div> */}
+            <img
+              src="/images/LOGO2.png"   
+              alt="TourGuide Logo"
+              className="w-12 h-auto  group-hover:scale-105 transition-transform"
+            />
             {!isCollapsed && (
               <span className="text-gray-900 dark:text-white">TourGuide</span>
             )}
