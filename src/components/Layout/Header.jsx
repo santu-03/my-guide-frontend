@@ -612,7 +612,7 @@ function SearchSuggestions({
   if (!show) return null;
 
   return (
-    <div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden z-50">
+    <div className="absolute left-0 right-0   bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden z-50">
       <div className="max-h-[70vh] overflow-y-auto py-2">
         {debouncedQuery ? (
           renderGroup("Suggestions", filteredSuggestions, <Search className="h-3.5 w-3.5" />)

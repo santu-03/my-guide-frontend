@@ -1247,9 +1247,9 @@ import Button from '@/components/ui/Button';
 import api from '@/lib/api';
 
 const heroImages = [
-  "/images/hero-bg.jpg",
-  "/images/hero-bg-2.jpg",
-  "/images/hero-bg-3.jpg",
+  "/images/Howrah-Bridge.jpg",
+  "/images/Pareshnath-Jain-Temple.jpg",
+  "/images/Victoria-Memorial.jpg",
 ];
 
 /* ----------------------------- helpers (top) ----------------------------- */
@@ -1374,7 +1374,7 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 ">
       {/* Hero Section with sliding background */}
       <section className="relative text-white overflow-hidden">
         {/* Sliding background images */}

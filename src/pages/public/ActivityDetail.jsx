@@ -754,6 +754,21 @@ import Button from '@/components/ui/Button';
 
 const fmtINR = n => new Intl.NumberFormat('en-IN',{ style:'currency', currency:'INR', maximumFractionDigits:0 }).format(n||0);
 
+const getCategoryEmoji = (category) => {
+  const emojiMap = {
+    cultural: '🏛️',
+    food: '🍽️',
+    adventure: '🏔️',
+    nature: '🌿',
+    art: '🎨',
+    entertainment: '🎭',
+    heritage: '🏛️',
+    'food_drink': '🍷',
+    default: '📸'
+  };
+  return emojiMap[(category || '').toLowerCase()] || emojiMap.default;
+};
+
 export default function ActivityDetail(){
   const { id } = useParams();
   const nav = useNavigate();
@@ -769,7 +784,15 @@ export default function ActivityDetail(){
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
-      <div className="h-64 bg-gray-200 overflow-hidden rounded-lg">{data.images?.[0] && <img src={data.images[0]} alt={data.title} className="w-full h-full object-cover" />}</div>
+      <div className="h-64 bg-gray-200 overflow-hidden rounded-lg">
+        {data.images?.[0] ? (
+          <img src={data.images[0]} alt={data.title} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-6xl">
+            {getCategoryEmoji(data.category)}
+          </div>
+        )}
+      </div>
       <h1 className="text-3xl font-bold">{data.title}</h1>
       <p className="text-gray-700">{data.description}</p>
       <div className="text-2xl font-bold">{fmtINR(price)}</div>
