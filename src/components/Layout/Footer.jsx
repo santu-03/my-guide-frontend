@@ -172,8 +172,8 @@ const Footer = () => {
       { label: "Cancellation Policy", href: "/cancellation" },
     ],
     "For Partners": [
-      { label: "Become a Guide", href: "/partners/guide" },
-      { label: "Partner Dashboard", href: "/partners/dashboard" },
+      { label: "Become a Guide", href: "/auth/signup" },
+      { label: "Partner Dashboard", href: "/auth/signup" },
       { label: "Marketing Resources", href: "/partners/resources" },
       { label: "API Documentation", href: "/developers" },
     ]
@@ -214,7 +214,7 @@ const Footer = () => {
 
   const contactInfo = [
     { icon: Phone, text: "+1 (555) 123-4567", href: "tel:+15551234567" },
-    { icon: Mail, text: "hello@tourguide.com", href: "mailto:hello@tourguide.com" },
+    { icon: Mail, text: "hello@tourguide.com", href: "mailto:contact@tourguide.com" },
     { icon: MapPin, text: "San Francisco, CA", href: "https://maps.google.com/?q=San Francisco, CA" },
   ];
 

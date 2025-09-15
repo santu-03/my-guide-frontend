@@ -458,28 +458,28 @@ const PREMIUM_GHOST_CLASSES =
   "dark:hover:bg-gray-800/90 shadow-sm backdrop-blur focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition";
 
 const TRENDING_SEARCHES = Object.freeze([
-  "Rome city tour", "Florence food tour", "Colosseum tickets",
-  "Vatican skip the line", "Amalfi boat trip", "Tuscany wine tasting",
+  "RVictoria Memorial", "Howrah Bridge", "Dakshineswar Kali Temple",
+  "VScience City", "Eco Park", "Alipore Zoo",
 ]);
 
 const SEED_SUGGESTIONS = Object.freeze([
-  "Rome, Italy", "Florence, Italy", "Venice gondola", "Milan cathedral",
-  "Naples pizza tour", "Pompei day trip", "Cinque Terre hike",
-  "Sicily beaches", "Turin museums", "Bologna food market",
+  "Victoria Memorial, Howrah Bridge", "Dakshineswar Kali Temple, Pareshnath Jain Temple", "Science City", "Maidan",
+  "Nicco Park", "Park Street", "Jorasanko Thakur Bari",
+  "Birla Planetarium", "Alipore Zoo", "Eco Park",
 ]);
 
 const MOCK_NOTIFICATIONS = Object.freeze([
   {
     id: 1,
     title: "Booking Confirmed",
-    message: "Your Rome City Tour is confirmed for tomorrow",
+    message: "Kolkata City Tour is confirmed for tomorrow",
     time: "2h ago",
     unread: true
   },
   {
     id: 2,
     title: "Tour Reminder",
-    message: "Your Florence Food Tour starts in 1 hour",
+    message: "Your Alipore Zoo visit starts in 1 hour",
     time: "1d ago",
     unread: false
   },
