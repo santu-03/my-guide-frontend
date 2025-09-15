@@ -458,7 +458,7 @@ const PREMIUM_GHOST_CLASSES =
   "dark:hover:bg-gray-800/90 shadow-sm backdrop-blur focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition";
 
 const TRENDING_SEARCHES = Object.freeze([
-  "RVictoria Memorial", "Howrah Bridge", "Dakshineswar Kali Temple",
+  "Victoria Memorial", "Howrah Bridge", "Dakshineswar Kali Temple",
   "VScience City", "Eco Park", "Alipore Zoo",
 ]);
 
