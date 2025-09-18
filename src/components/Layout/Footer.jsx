@@ -182,31 +182,31 @@ const Footer = () => {
   const socialLinks = [
     { 
       icon: Facebook, 
-      href: "https://facebook.com/tourguide", 
+      href: "https://facebook.com/myguide", 
       label: "Follow us on Facebook",
       color: "hover:text-blue-500"
     },
     { 
       icon: Twitter, 
-      href: "https://twitter.com/tourguide", 
+      href: "https://twitter.com/myguide", 
       label: "Follow us on Twitter",
       color: "hover:text-sky-500"
     },
     { 
       icon: Instagram, 
-      href: "https://instagram.com/tourguide", 
+      href: "https://instagram.com/myguide", 
       label: "Follow us on Instagram",
       color: "hover:text-pink-500"
     },
     { 
       icon: Linkedin, 
-      href: "https://linkedin.com/company/tourguide", 
+      href: "https://linkedin.com/company/myguide", 
       label: "Follow us on LinkedIn",
       color: "hover:text-blue-600"
     },
     { 
       icon: Youtube, 
-      href: "https://youtube.com/tourguide", 
+      href: "https://youtube.com/myguide", 
       label: "Subscribe to our YouTube channel",
       color: "hover:text-red-500"
     },
@@ -214,7 +214,7 @@ const Footer = () => {
 
   const contactInfo = [
     { icon: Phone, text: "+1 (555) 123-4567", href: "tel:+15551234567" },
-    { icon: Mail, text: "hello@tourguide.com", href: "mailto:contact@tourguide.com" },
+    { icon: Mail, text: "hello@myguide.com", href: "mailto:contact@myguide.com" },
     { icon: MapPin, text: "San Francisco, CA", href: "https://maps.google.com/?q=San Francisco, CA" },
   ];
 
@@ -337,7 +337,7 @@ const Footer = () => {
               <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg group-hover:scale-105 transition-transform">
                 TG
               </div>
-              <span className="font-bold text-2xl text-white">TourGuide</span>
+              <span className="font-bold text-2xl text-white">MyGuide</span>
             </Link>
             
             <p className="text-gray-400 leading-relaxed mb-6 max-w-md">
@@ -413,7 +413,7 @@ const Footer = () => {
             
             {/* Copyright */}
             <p>
-              © {currentYear} TourGuide, Inc. All rights reserved.
+              © {currentYear} MyGuide, Inc. All rights reserved.
             </p>
 
             {/* Legal Links */}

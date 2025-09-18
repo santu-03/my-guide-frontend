@@ -1158,7 +1158,7 @@ const Login = () => {
               alt="TourGuide Logo"
               className="w-12 h-auto  group-hover:scale-105 transition-transform"
             />
-              <span className="font-bold text-2xl text-gray-900 dark:text-white">TourGuide</span>
+              <span className="font-bold text-2xl text-gray-900 dark:text-white">MyGuide</span>
             </Link>
 
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back</h2>

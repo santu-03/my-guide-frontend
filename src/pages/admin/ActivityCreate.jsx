@@ -1,305 +1,35 @@
-// // import { useState } from "react";
-// // import { useNavigate } from "react-router-dom";
-// // import DashboardLayout from "@/components/Layout/DashboardLayout";
-// // import Button from "@/components/ui/Button";
-// // import { Card, CardContent } from "@/components/ui/Card";
-// // import api from "@/lib/api";
-// // import { uploadMediaMany } from "@/lib/media";
-// // import toast from "react-hot-toast";
 
-// // export default function ActivityCreate() {
-// //   const nav = useNavigate();
-// //   const [form, setForm] = useState({
-// //     title: "",
-// //     description: "",
-// //     category: "",
-// //     price: "",
-// //     capacity: "",
-// //     city: "",
-// //     country: "",
-// //     placeId: "", // optional link to a Place
-// //     featured: false,
-// //     isPublished: true,
-// //   });
-// //   const [images, setImages] = useState([]);
-// //   const [busy, setBusy] = useState(false);
-
-// //   const onUpload = async (files) => {
-// //     if (!files?.length) return;
-// //     setBusy(true);
-// //     try {
-// //       const docs = await uploadMediaMany(files);
-// //       setImages((prev) => [...prev, ...docs.map((d) => d.url)]);
-// //       toast.success(`Uploaded ${docs.length} file(s)`);
-// //     } catch {
-// //       toast.error("Upload failed");
-// //     } finally {
-// //       setBusy(false);
-// //     }
-// //   };
-
-// //   const removeImage = (idx) => {
-// //     setImages((prev) => prev.filter((_, i) => i !== idx));
-// //   };
-
-// //   const submit = async (e) => {
-// //     e.preventDefault();
-// //     setBusy(true);
-// //     try {
-// //       const payload = {
-// //         title: form.title.trim(),
-// //         description: form.description.trim(),
-// //         category: form.category.trim(),
-// //         price: Number(form.price) || 0,
-// //         capacity: Number(form.capacity) || 1,
-// //         location: { city: form.city.trim(), country: form.country.trim() },
-// //         images,
-// //         isPublished: !!form.isPublished,
-// //         featured: !!form.featured,
-// //       };
-// //       if (form.placeId) payload.placeId = form.placeId; // or `place` based on your API
-
-// //       const { data } = await api.post("/activities", payload);
-// //       toast.success("Activity created");
-// //       nav(`/activities/${data?.data?._id || data?._id}`);
-// //     } catch (err) {
-// //       toast.error(err?.response?.data?.error || "Failed to create activity");
-// //     } finally {
-// //       setBusy(false);
-// //     }
-// //   };
-
-// //   return (
-// //     <DashboardLayout role="admin" title="Add Activity">
-// //       <form onSubmit={submit} className="space-y-6">
-// //         <Card>
-// //           <CardContent className="p-4 grid gap-4 md:grid-cols-2">
-// //             <input
-// //               className="border p-2 rounded"
-// //               placeholder="Title *"
-// //               value={form.title}
-// //               onChange={(e) => setForm((s) => ({ ...s, title: e.target.value }))}
-// //               required
-// //             />
-// //             <input
-// //               className="border p-2 rounded"
-// //               placeholder="Category (e.g. cultural, food)"
-// //               value={form.category}
-// //               onChange={(e) => setForm((s) => ({ ...s, category: e.target.value }))}
-// //             />
-// //             <input
-// //               className="border p-2 rounded"
-// //               placeholder="Price (₹) *"
-// //               value={form.price}
-// //               type="number"
-// //               min="0"
-// //               onChange={(e) => setForm((s) => ({ ...s, price: e.target.value }))}
-// //               required
-// //             />
-// //             <input
-// //               className="border p-2 rounded"
-// //               placeholder="Capacity (max guests) *"
-// //               value={form.capacity}
-// //               type="number"
-// //               min="1"
-// //               onChange={(e) => setForm((s) => ({ ...s, capacity: e.target.value }))}
-// //               required
-// //             />
-// //             <input
-// //               className="border p-2 rounded"
-// //               placeholder="City"
-// //               value={form.city}
-// //               onChange={(e) => setForm((s) => ({ ...s, city: e.target.value }))}
-// //             />
-// //             <input
-// //               className="border p-2 rounded"
-// //               placeholder="Country"
-// //               value={form.country}
-// //               onChange={(e) => setForm((s) => ({ ...s, country: e.target.value }))}
-// //             />
-// //             <input
-// //               className="border p-2 rounded md:col-span-2"
-// //               placeholder="Linked Place ID (optional)"
-// //               value={form.placeId}
-// //               onChange={(e) => setForm((s) => ({ ...s, placeId: e.target.value }))}
-// //             />
-// //             <div className="md:col-span-2">
-// //               <textarea
-// //                 className="border p-2 rounded w-full min-h-[120px]"
-// //                 placeholder="Description"
-// //                 value={form.description}
-// //                 onChange={(e) => setForm((s) => ({ ...s, description: e.target.value }))}
-// //               />
-// //             </div>
-// //             <div className="flex items-center gap-6 md:col-span-2">
-// //               <label className="flex items-center gap-2">
-// //                 <input
-// //                   type="checkbox"
-// //                   checked={form.featured}
-// //                   onChange={(e) => setForm((s) => ({ ...s, featured: e.target.checked }))}
-// //                 />
-// //                 <span>Featured (show on Home)</span>
-// //               </label>
-// //               <label className="flex items-center gap-2">
-// //                 <input
-// //                   type="checkbox"
-// //                   checked={form.isPublished}
-// //                   onChange={(e) => setForm((s) => ({ ...s, isPublished: e.target.checked }))}
-// //                 />
-// //                 <span>Published</span>
-// //               </label>
-// //             </div>
-// //           </CardContent>
-// //         </Card>
-
-// //         <Card>
-// //           <CardContent className="p-4 space-y-3">
-// //             <input type="file" multiple accept="image/*,video/*" onChange={(e) => onUpload(e.target.files)} />
-// //             {!!images.length && (
-// //               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-// //                 {images.map((u, i) => (
-// //                   <div key={i} className="relative">
-// //                     <img
-// //                       src={u.includes("/upload/") ? u.replace("/upload/", "/upload/c_fill,w_400,h_250,f_auto,q_auto/") : u}
-// //                       alt=""
-// //                       className="h-28 w-full object-cover rounded"
-// //                     />
-// //                     <button
-// //                       type="button"
-// //                       onClick={() => removeImage(i)}
-// //                       className="absolute top-1 right-1 text-xs bg-black/60 text-white px-2 py-0.5 rounded"
-// //                     >
-// //                       Remove
-// //                     </button>
-// //                   </div>
-// //                 ))}
-// //               </div>
-// //             )}
-// //           </CardContent>
-// //         </Card>
-
-// //         <div className="flex gap-3">
-// //           <Button type="submit" disabled={busy}>{busy ? "Saving…" : "Create Activity"}</Button>
-// //           <Button variant="outline" onClick={() => nav(-1)} disabled={busy}>Cancel</Button>
-// //         </div>
-// //       </form>
-// //     </DashboardLayout>
-// //   );
-// // }
-// import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import api from '@/lib/api';
-// import Button from '@/components/ui/Button';
-// import { Card, CardContent } from '@/components/ui/Card';
-// import toast from 'react-hot-toast';
-
-// export default function ActivityCreate(){
-//   const nav = useNavigate();
-//   const [form,setForm]=useState({ title:'', description:'', category:'', price:0, durationMinutes:60, city:'Kolkata', country:'India', featured:true, isPublished:true, tags:'' });
-//   const [files,setFiles]=useState([]);
-//   const [uploading,setUploading]=useState(false);
-
-//   const uploadImages = async ()=>{
-//     if (!files.length) return [];
-//     const fd = new FormData();
-//     files.forEach(f => fd.append('files', f));
-//     const { data } = await api.post('/media/upload', fd, { headers:{ 'Content-Type':'multipart/form-data' } });
-//     return data?.data?.urls || [];
-//   };
-
-//   const onSubmit = async (e)=>{
-//     e.preventDefault();
-//     try{
-//       setUploading(true);
-//       const urls = await uploadImages();
-//       await api.post('/activities', {
-//         title: form.title,
-//         description: form.description,
-//         category: form.category,
-//         tags: form.tags ? form.tags.split(',').map(t=>t.trim()).filter(Boolean) : [],
-//         price: Number(form.price)||0,
-//         durationMinutes: Number(form.durationMinutes)||60,
-//         location: { city: form.city, country: form.country },
-//         images: urls,
-//         featured: !!form.featured,
-//         isPublished: !!form.isPublished,
-//       });
-//       toast.success('Activity created');
-//       nav('/admin/activities');
-//     }catch(err){ /* interceptor toasts */ }finally{ setUploading(false); }
-//   };
-
-//   return (
-//     <div className="max-w-3xl mx-auto px-4 py-8">
-//       <h1 className="text-2xl font-bold mb-4">Add Activity</h1>
-//       <Card>
-//         <CardContent className="p-4 space-y-4">
-//           <form onSubmit={onSubmit} className="space-y-4">
-//             <input className="w-full border p-3 rounded" placeholder="Title *" value={form.title} onChange={e=>setForm(s=>({...s, title:e.target.value}))} required />
-//             <textarea className="w-full border p-3 rounded" rows={4} placeholder="Description" value={form.description} onChange={e=>setForm(s=>({...s, description:e.target.value}))}/>
-//             <div className="grid grid-cols-2 gap-3">
-//               <input className="border p-3 rounded" placeholder="Category" value={form.category} onChange={e=>setForm(s=>({...s, category:e.target.value}))}/>
-//               <input className="border p-3 rounded" placeholder="Tags (comma separated)" value={form.tags} onChange={e=>setForm(s=>({...s, tags:e.target.value}))}/>
-//               <input type="number" className="border p-3 rounded" placeholder="Price (INR)" value={form.price} onChange={e=>setForm(s=>({...s, price:e.target.value}))}/>
-//               <input type="number" className="border p-3 rounded" placeholder="Duration (minutes)" value={form.durationMinutes} onChange={e=>setForm(s=>({...s, durationMinutes:e.target.value}))}/>
-//             </div>
-
-//             <div>
-//               <label className="block text-sm mb-1">Images (Cloudinary)</label>
-//               <input type="file" multiple accept="image/*" onChange={e=>setFiles(Array.from(e.target.files||[]))}/>
-//               <div className="mt-2 flex gap-2 flex-wrap">{files.map((f,i)=><span key={i} className="text-xs bg-gray-100 px-2 py-1 rounded">{f.name}</span>)}</div>
-//             </div>
-
-//             <div className="flex gap-6">
-//               <label className="inline-flex items-center gap-2">
-//                 <input type="checkbox" checked={form.featured} onChange={e=>setForm(s=>({...s, featured:e.target.checked}))}/>
-//                 <span>Featured</span>
-//               </label>
-//               <label className="inline-flex items-center gap-2">
-//                 <input type="checkbox" checked={form.isPublished} onChange={e=>setForm(s=>({...s, isPublished:e.target.checked}))}/>
-//                 <span>Published</span>
-//               </label>
-//             </div>
-
-//             <div className="flex justify-end gap-2">
-//               <Button variant="outline" onClick={()=>history.back()}>Cancel</Button>
-//               <Button type="submit" loading={uploading}>Create</Button>
-//             </div>
-//           </form>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// }
-
-
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import DashboardLayout from '@/components/Layout/DashboardLayout';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
-import { 
-  Upload, 
-  X, 
-  MapPin, 
-  Clock, 
-  DollarSign, 
+import {
+  Upload,
+  X,
+  MapPin,
+  Clock,
+  DollarSign,
   Users,
   Star,
   Eye,
   Save,
-  ArrowLeft
+  ArrowLeft,
+  Loader2,
 } from 'lucide-react';
-import { useSampleDataStore } from '@/store/sampleData';
+
+// ✅ Your API hooks
+import { createActivity } from '@/lib/activities';
+import { getPlaces } from '@/lib/places';
+import { uploadMediaMany } from '@/lib/media';
 import { useAuthStore } from '@/store/auth';
 import toast from 'react-hot-toast';
 
 export default function ActivityCreate() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { places, addActivity } = useSampleDataStore();
-  
+
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -309,120 +39,155 @@ export default function ActivityCreate() {
     placeId: '',
     featured: false,
     isPublished: true,
-    tags: ''
+    tags: '',
+    capacity: '',
   });
-  
-  const [images, setImages] = useState([]);
+
+  const [images, setImages] = useState([]); // [{ url, public_id, ... }]
+  const [places, setPlaces] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [placesLoading, setPlacesLoading] = useState(true);
 
-  // Handle input changes
+  // Load places for the select
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        setPlacesLoading(true);
+        const response = await getPlaces({ limit: 200 });
+
+        // Try common shapes: {data:[...]}, {places:[...]}, {docs:[...]}, or plain array
+        const placesData =
+          response?.data?.places ||
+          response?.data?.docs ||
+          response?.data ||
+          response?.places ||
+          response?.docs ||
+          response ||
+          [];
+
+        setPlaces(Array.isArray(placesData) ? placesData : []);
+      } catch (error) {
+        console.error('Error fetching places:', error);
+        toast.error('Failed to load places');
+        setPlaces([]);
+      } finally {
+        setPlacesLoading(false);
+      }
+    };
+    fetchPlaces();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  // Mock image upload (in real app, this would upload to Cloudinary/S3)
-  const handleImageUpload = (files) => {
-    const newImages = Array.from(files).map((file, index) => ({
-      id: Date.now() + index,
-      url: URL.createObjectURL(file),
-      name: file.name
-    }));
-    setImages(prev => [...prev, ...newImages]);
+  // Real image upload via your media API
+  const handleImageUpload = async (fileList) => {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    try {
+      setUploadingImages(true);
+      const uploaded = await uploadMediaMany(files); // expects array of {url, public_id,...}
+      if (uploaded?.length) {
+        setImages((prev) => [...prev, ...uploaded]);
+        toast.success(`${uploaded.length} image${uploaded.length > 1 ? 's' : ''} uploaded`);
+      }
+    } catch (err) {
+      console.error('Image upload error:', err);
+      toast.error('Image upload failed');
+    } finally {
+      setUploadingImages(false);
+    }
   };
 
-  // Handle drag and drop
+  const removeImage = (idx) => {
+    setImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
+    if (e.type === 'dragenter' || e.type === 'dragover') setDragActive(true);
+    if (e.type === 'dragleave') setDragActive(false);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer.files?.length) {
       handleImageUpload(e.dataTransfer.files);
     }
   };
 
-  // Remove image
-  const removeImage = (id) => {
-    setImages(prev => prev.filter(img => img.id !== id));
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (loading) return;
+
+    // Basic validations
+    if (!form.title.trim()) return toast.error('Activity title is required');
+    if (!form.placeId) return toast.error('Select a place');
+    if (!form.category) return toast.error('Select a category');
+
+    const priceNum = Number(form.price);
+    if (!Number.isFinite(priceNum) || priceNum < 0) return toast.error('Enter a valid price');
+
+    if (!images.length) return toast.error('Add at least one image');
 
     try {
-      // Validate required fields
-      if (!form.title.trim()) {
-        toast.error('Activity title is required');
-        return;
-      }
+      setLoading(true);
 
-      if (!form.price || Number(form.price) <= 0) {
-        toast.error('Please enter a valid price');
-        return;
-      }
-
-      if (!form.placeId) {
-        toast.error('Please select a place for this activity');
-        return;
-      }
-
-      // Create activity data
-      const activityData = {
+      const payload = {
         title: form.title.trim(),
         description: form.description.trim(),
         category: form.category.trim(),
-        price: Number(form.price),
-        durationMinutes: Number(form.durationMinutes),
-        placeId: form.placeId,
-        featured: form.featured,
-        isPublished: form.isPublished,
-        images: images.map(img => img.url),
-        tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : []
+        price: priceNum,
+        durationMinutes: Number(form.durationMinutes) || 60,
+        place: form.placeId, // ✅ backend expects field named "place" (ObjectId)
+        featured: !!form.featured,
+        isPublished: !!form.isPublished,
+        tags: form.tags
+          ? form.tags.split(',').map((t) => t.trim()).filter(Boolean)
+          : [],
+        capacity: form.capacity ? Number(form.capacity) : undefined,
+        images, // array of uploaded URLs/objects
       };
 
-      // Add to store
-      addActivity(activityData);
-      
-      toast.success('Activity created successfully!');
+      await createActivity(payload);
+      toast.success('Activity created');
       navigate('/admin/activities');
-      
     } catch (error) {
       console.error('Error creating activity:', error);
-      toast.error('Failed to create activity');
+      const message = error?.response?.data?.message || error?.message;
+      if (error?.response?.status === 400) toast.error(message || 'Invalid data');
+      else if (error?.response?.status === 401) toast.error('Unauthorized');
+      else toast.error(message || 'Failed to create activity');
     } finally {
       setLoading(false);
     }
   };
 
   const categories = [
-    'cultural', 'nature', 'art', 'spiritual', 'food', 
-    'adventure', 'entertainment', 'shopping', 'historical'
+    'cultural',
+    'nature',
+    'art',
+    'spiritual',
+    'food',
+    'adventure',
+    'entertainment',
+    'shopping',
+    'historical',
   ];
 
   return (
     <DashboardLayout role="admin" title="Create Activity" user={user}>
-      
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => navigate('/admin/activities')}
           className="inline-flex items-center gap-2"
         >
@@ -431,19 +196,19 @@ export default function ActivityCreate() {
         </Button>
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Activity</h1>
-          <p className="text-gray-600 dark:text-gray-400">Add a new tour activity for visitors</p>
+          <p className="text-gray-600 dark:text-gray-400">Add a new tour activity</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        
         {/* Basic Information */}
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Basic Information</h2>
-            
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Basic Information
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
               {/* Title */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -454,9 +219,9 @@ export default function ActivityCreate() {
                   name="title"
                   value={form.title}
                   onChange={handleChange}
-                  placeholder="e.g., Victoria Memorial Heritage Walk"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800"
+                  placeholder="e.g., Heritage Walk at Victoria Memorial"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
                 />
               </div>
 
@@ -470,30 +235,13 @@ export default function ActivityCreate() {
                   value={form.category}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
                 >
                   <option value="">Select category</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat} className="capitalize">{cat}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Place */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Location *
-                </label>
-                <select
-                  name="placeId"
-                  value={form.placeId}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800"
-                >
-                  <option value="">Select a place</option>
-                  {places.map(place => (
-                    <option key={place.id} value={place.id}>{place.name}</option>
+                  {categories.map((c) => (
+                    <option key={c} value={c} className="capitalize">
+                      {c}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -510,10 +258,11 @@ export default function ActivityCreate() {
                     name="price"
                     value={form.price}
                     onChange={handleChange}
-                    placeholder="499"
                     min="0"
+                    step="1"
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800"
+                    placeholder="e.g., 499"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
                   />
                 </div>
               </div>
@@ -521,7 +270,7 @@ export default function ActivityCreate() {
               {/* Duration */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Duration (minutes) *
+                  Duration (minutes)
                 </label>
                 <div className="relative">
                   <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -530,11 +279,55 @@ export default function ActivityCreate() {
                     name="durationMinutes"
                     value={form.durationMinutes}
                     onChange={handleChange}
-                    placeholder="60"
-                    min="1"
-                    required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800"
+                    min="15"
+                    step="15"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
                   />
+                </div>
+              </div>
+
+              {/* Capacity (optional) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Capacity (people)
+                </label>
+                <div className="relative">
+                  <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="number"
+                    name="capacity"
+                    value={form.capacity}
+                    onChange={handleChange}
+                    min="1"
+                    step="1"
+                    placeholder="e.g., 20"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
+                  />
+                </div>
+              </div>
+
+              {/* Place */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Place *
+                </label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <select
+                    name="placeId"
+                    value={form.placeId}
+                    onChange={handleChange}
+                    required
+                    disabled={placesLoading}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
+                  >
+                    <option value="">{placesLoading ? 'Loading places…' : 'Select a place'}</option>
+                    {places.map((p) => (
+                      <option key={p._id || p.id} value={p._id || p.id}>
+                        {p.name} • {(p.city || p.address?.city) ?? '—'}, {(p.country || p.address?.country) ?? '—'}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -548,25 +341,42 @@ export default function ActivityCreate() {
                   name="tags"
                   value={form.tags}
                   onChange={handleChange}
-                  placeholder="heritage, history, photography (comma separated)"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800"
+                  placeholder="heritage, guided tour (comma separated)"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
                 />
-                <p className="text-xs text-gray-500 mt-1">Separate tags with commas</p>
               </div>
 
-              {/* Description */}
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Description
+              {/* Published / Featured */}
+              <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={form.featured}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                  />
+                  <div className="flex items-center gap-2">
+                    <Star className="h-4 w-4 text-yellow-500" />
+                    <span className="text-gray-700 dark:text-gray-300">Featured</span>
+                  </div>
+                  <span className="text-sm text-gray-500">(Highlight on homepage)</span>
                 </label>
-                <textarea
-                  name="description"
-                  value={form.description}
-                  onChange={handleChange}
-                  rows={4}
-                  placeholder="Describe what makes this activity special..."
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800 resize-none"
-                />
+
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="isPublished"
+                    checked={form.isPublished}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                  />
+                  <div className="flex items-center gap-2">
+                    <Eye className="h-4 w-4 text-green-500" />
+                    <span className="text-gray-700 dark:text-gray-300">Published</span>
+                  </div>
+                  <span className="text-sm text-gray-500">(Visible to public)</span>
+                </label>
               </div>
             </div>
           </CardContent>
@@ -575,9 +385,8 @@ export default function ActivityCreate() {
         {/* Images */}
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Images</h2>
-            
-            {/* Upload Area */}
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Images *</h2>
+
             <div
               className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                 dragActive
@@ -591,9 +400,9 @@ export default function ActivityCreate() {
             >
               <input
                 type="file"
-                multiple
                 accept="image/*"
-                onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
+                multiple
+                onChange={(e) => handleImageUpload(e.target.files)}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
               <Upload className="h-10 w-10 text-gray-400 mx-auto mb-4" />
@@ -601,95 +410,70 @@ export default function ActivityCreate() {
                 Drop images here or <span className="text-primary-600 font-medium">browse</span>
               </p>
               <p className="text-sm text-gray-500">
-                Support: JPG, PNG, WEBP up to 10MB each
+                JPG/PNG/WEBP up to 10MB each. At least one image required.
               </p>
             </div>
 
-            {/* Image Preview */}
-            {images.length > 0 && (
+            {!!images.length && (
               <div className="mt-6">
                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                   Uploaded Images ({images.length})
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {images.map((image) => (
-                    <div key={image.id} className="relative group">
+                  {images.map((img, idx) => (
+                    <div key={img.public_id || img.url || idx} className="relative group">
                       <img
-                        src={image.url}
-                        alt={image.name}
+                        src={img.url}
+                        alt={`Activity ${idx}`}
                         className="w-full h-24 object-cover rounded-lg"
+                        onError={(e) => (e.currentTarget.src = '/placeholder-image.jpg')}
                       />
+                      {idx === 0 && (
+                        <div className="absolute bottom-1 left-1 bg-green-500 text-white text-xs px-2 py-1 rounded">
+                          Main
+                        </div>
+                      )}
                       <button
                         type="button"
-                        onClick={() => removeImage(image.id)}
+                        onClick={() => removeImage(idx)}
                         className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                        aria-label="Remove image"
                       >
                         <X className="h-3 w-3" />
                       </button>
                     </div>
                   ))}
                 </div>
+                <p className="text-xs text-gray-500 mt-2">First image is used as the cover.</p>
+              </div>
+            )}
+
+            {uploadingImages && (
+              <div className="flex items-center gap-2 text-sm text-gray-500 mt-3">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Uploading images…
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Settings */}
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Settings</h2>
-            
-            <div className="space-y-4">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="featured"
-                  checked={form.featured}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                />
-                <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-yellow-500" />
-                  <span className="text-gray-700 dark:text-gray-300">Featured Activity</span>
-                </div>
-                <span className="text-sm text-gray-500">(Will appear on homepage)</span>
-              </label>
-
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="isPublished"
-                  checked={form.isPublished}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                />
-                <div className="flex items-center gap-2">
-                  <Eye className="h-4 w-4 text-green-500" />
-                  <span className="text-gray-700 dark:text-gray-300">Published</span>
-                </div>
-                <span className="text-sm text-gray-500">(Visible to public)</span>
-              </label>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Actions */}
         <div className="flex items-center justify-end gap-4">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => navigate('/admin/activities')}
-            disabled={loading}
-          >
+          <Button type="button" variant="outline" onClick={() => navigate('/admin/activities')} disabled={loading}>
             Cancel
           </Button>
-          <Button 
-            type="submit" 
-            loading={loading}
-            className="inline-flex items-center gap-2"
-          >
-            <Save className="h-4 w-4" />
-            Create Activity
+          <Button type="submit" disabled={loading} className="inline-flex items-center gap-2">
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Saving…
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4" />
+                Create Activity
+              </>
+            )}
           </Button>
         </div>
       </form>

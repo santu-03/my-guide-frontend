@@ -308,7 +308,7 @@ export default function Sidebar({
               className="w-12 h-auto  group-hover:scale-105 transition-transform"
             />
             {!isCollapsed && (
-              <span className="text-gray-900 dark:text-white">TourGuide</span>
+              <span className="text-gray-900 dark:text-white">MyGuide</span>
             )}
           </Link>
         </div>

@@ -832,7 +832,7 @@ function Header() {
               className="w-12 h-auto  group-hover:scale-105 transition-transform"
             />
             <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">
-              TourGuide
+              MyGuide
             </span>
             
           </Link>
