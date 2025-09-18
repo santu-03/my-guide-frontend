@@ -1,6 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import DashboardLayout from '@/components/Layout/DashboardLayout';
 import Button from '@/components/ui/Button';
@@ -18,13 +18,86 @@ import {
   ArrowLeft,
   Loader2,
 } from 'lucide-react';
-
-// ✅ Your API hooks
-import { createActivity } from '@/lib/activities';
-import { getPlaces } from '@/lib/places';
-import { uploadMediaMany } from '@/lib/media';
-import { useAuthStore } from '@/store/auth';
 import toast from 'react-hot-toast';
+
+/* ---------------- local API (aligned with your backend) ---------------- */
+const API_BASE = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const api = axios.create({ baseURL: API_BASE });
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+// Activities
+async function createActivity(payload) {
+  // payload: {title, description, category, price, durationMinutes, place, featured, isPublished, capacity?, tags[], images[] (string urls) }
+  return api.post('/activities', payload);
+}
+
+// Places (list for select)
+async function getPlaces({ limit = 200 } = {}) {
+  return api.get('/places', { params: { limit } });
+}
+
+// Uploads: prefer bulk, then fallback to single
+async function uploadMediaMany(files) {
+  const list = Array.from(files || []);
+  if (!list.length) return [];
+
+  const toUrl = (x) =>
+    typeof x === 'string'
+      ? x
+      : x?.url || x?.secure_url || x?.Location || x?.location || '';
+
+  // 1) Try /upload/many
+  try {
+    const fd = new FormData();
+    list.forEach((f) => fd.append('images', f));
+    const r = await api.post('/upload/many', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+    const out = r?.data?.urls || r?.data?.files || r?.data?.data || r?.data || [];
+    const urls = (Array.isArray(out) ? out : [out]).map(toUrl).filter(Boolean);
+    if (urls.length) return urls;
+  } catch {
+    // ignore and try alternative
+  }
+
+  // 2) Try /media/upload-many
+  try {
+    const fd = new FormData();
+    list.forEach((f) => fd.append('images', f));
+    const r = await api.post('/media/upload-many', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+    const out = r?.data?.urls || r?.data?.files || r?.data?.data || r?.data || [];
+    const urls = (Array.isArray(out) ? out : [out]).map(toUrl).filter(Boolean);
+    if (urls.length) return urls;
+  } catch {
+    // ignore and fallback to singles
+  }
+
+  // 3) Fallback: single /upload per file
+  const urls = [];
+  for (const f of list) {
+    const fd = new FormData();
+    fd.append('file', f);
+    const r = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+    const item = r?.data?.data || r?.data;
+    const url = toUrl(item);
+    if (url) urls.push(url);
+  }
+  return urls;
+}
+
+// Minimal shim for user (no global store)
+function useAuthStore() {
+  try {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const isAuthenticated = !!localStorage.getItem('token');
+    return { user, isAuthenticated };
+  } catch {
+    return { user: null, isAuthenticated: false };
+  }
+}
+/* ---------------------------------------------------------------------- */
 
 export default function ActivityCreate() {
   const navigate = useNavigate();
@@ -43,21 +116,20 @@ export default function ActivityCreate() {
     capacity: '',
   });
 
-  const [images, setImages] = useState([]); // [{ url, public_id, ... }]
+  // images => string[] (URLs) per your model
+  const [images, setImages] = useState([]);
   const [places, setPlaces] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [placesLoading, setPlacesLoading] = useState(true);
 
-  // Load places for the select
+  // Load places
   useEffect(() => {
-    const fetchPlaces = async () => {
+    (async () => {
       try {
         setPlacesLoading(true);
         const response = await getPlaces({ limit: 200 });
-
-        // Try common shapes: {data:[...]}, {places:[...]}, {docs:[...]}, or plain array
         const placesData =
           response?.data?.places ||
           response?.data?.docs ||
@@ -66,7 +138,6 @@ export default function ActivityCreate() {
           response?.docs ||
           response ||
           [];
-
         setPlaces(Array.isArray(placesData) ? placesData : []);
       } catch (error) {
         console.error('Error fetching places:', error);
@@ -75,8 +146,7 @@ export default function ActivityCreate() {
       } finally {
         setPlacesLoading(false);
       }
-    };
-    fetchPlaces();
+    })();
   }, []);
 
   const handleChange = (e) => {
@@ -84,16 +154,16 @@ export default function ActivityCreate() {
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  // Real image upload via your media API
+  // Upload images -> urls[]
   const handleImageUpload = async (fileList) => {
     const files = Array.from(fileList || []);
     if (!files.length) return;
     try {
       setUploadingImages(true);
-      const uploaded = await uploadMediaMany(files); // expects array of {url, public_id,...}
-      if (uploaded?.length) {
-        setImages((prev) => [...prev, ...uploaded]);
-        toast.success(`${uploaded.length} image${uploaded.length > 1 ? 's' : ''} uploaded`);
+      const urls = await uploadMediaMany(files); // string[]
+      if (urls?.length) {
+        setImages((prev) => [...prev, ...urls]);
+        toast.success(`${urls.length} image${urls.length > 1 ? 's' : ''} uploaded`);
       }
     } catch (err) {
       console.error('Image upload error:', err);
@@ -103,9 +173,7 @@ export default function ActivityCreate() {
     }
   };
 
-  const removeImage = (idx) => {
-    setImages((prev) => prev.filter((_, i) => i !== idx));
-  };
+  const removeImage = (idx) => setImages((prev) => prev.filter((_, i) => i !== idx));
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -127,13 +195,24 @@ export default function ActivityCreate() {
     e.preventDefault();
     if (loading) return;
 
-    // Basic validations
+    // Validations aligned to your schema
     if (!form.title.trim()) return toast.error('Activity title is required');
     if (!form.placeId) return toast.error('Select a place');
     if (!form.category) return toast.error('Select a category');
 
     const priceNum = Number(form.price);
-    if (!Number.isFinite(priceNum) || priceNum < 0) return toast.error('Enter a valid price');
+    if (!Number.isFinite(priceNum) || priceNum < 0 || priceNum > 50000)
+      return toast.error('Price must be between 0 and 50000');
+
+    const duration = Number(form.durationMinutes) || 60;
+    if (duration < 15 || duration > 1440)
+      return toast.error('Duration must be between 15 and 1440 minutes');
+
+    if (form.capacity) {
+      const cap = Number(form.capacity);
+      if (!Number.isFinite(cap) || cap < 1 || cap > 100)
+        return toast.error('Capacity must be between 1 and 100');
+    }
 
     if (!images.length) return toast.error('Add at least one image');
 
@@ -142,18 +221,22 @@ export default function ActivityCreate() {
 
       const payload = {
         title: form.title.trim(),
-        description: form.description.trim(),
+        description: (form.description || '').trim(),
         category: form.category.trim(),
         price: priceNum,
-        durationMinutes: Number(form.durationMinutes) || 60,
-        place: form.placeId, // ✅ backend expects field named "place" (ObjectId)
+        durationMinutes: duration,
+        place: form.placeId, // ObjectId string field name = "place"
         featured: !!form.featured,
         isPublished: !!form.isPublished,
-        tags: form.tags
-          ? form.tags.split(',').map((t) => t.trim()).filter(Boolean)
-          : [],
         capacity: form.capacity ? Number(form.capacity) : undefined,
-        images, // array of uploaded URLs/objects
+        tags: form.tags
+          ? form.tags
+              .split(',')
+              .map((t) => t.trim())
+              .filter(Boolean)
+              .map((t) => t.slice(0, 50))
+          : [],
+        images, // string[] (URLs)
       };
 
       await createActivity(payload);
@@ -259,6 +342,7 @@ export default function ActivityCreate() {
                     value={form.price}
                     onChange={handleChange}
                     min="0"
+                    max="50000"
                     step="1"
                     required
                     placeholder="e.g., 499"
@@ -280,6 +364,7 @@ export default function ActivityCreate() {
                     value={form.durationMinutes}
                     onChange={handleChange}
                     min="15"
+                    max="1440"
                     step="15"
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
                   />
@@ -299,6 +384,7 @@ export default function ActivityCreate() {
                     value={form.capacity}
                     onChange={handleChange}
                     min="1"
+                    max="100"
                     step="1"
                     placeholder="e.g., 20"
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-800"
@@ -421,12 +507,12 @@ export default function ActivityCreate() {
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {images.map((img, idx) => (
-                    <div key={img.public_id || img.url || idx} className="relative group">
+                    <div key={img + idx} className="relative group">
                       <img
-                        src={img.url}
+                        src={img}
                         alt={`Activity ${idx}`}
                         className="w-full h-24 object-cover rounded-lg"
-                        onError={(e) => (e.currentTarget.src = '/placeholder-image.jpg')}
+                        onError={(e) => (e.currentTarget.src = '/assets/images/placeholder-image.jpg')}
                       />
                       {idx === 0 && (
                         <div className="absolute bottom-1 left-1 bg-green-500 text-white text-xs px-2 py-1 rounded">

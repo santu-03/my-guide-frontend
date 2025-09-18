@@ -1,21 +1,3 @@
-// import React from "react";
-// import { Outlet } from "react-router-dom";
-// import Header from "./Header";
-// import Footer from "./Footer";
-
-// /** App shell for all public pages. Renders nested routes via <Outlet /> */
-// export default function Layout() {
-//   return (
-//     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
-//       <Header />
-//       <main className="flex-1">
-//         {/* Nested routes (Home, Search, Detail pages, etc.) */}
-//         <Outlet />
-//       </main>
-//       <Footer />
-//     </div>
-//   );
-// }
 import React, { Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
