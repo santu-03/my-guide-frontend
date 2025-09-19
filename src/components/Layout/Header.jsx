@@ -8,10 +8,6 @@ import { useAuthStore } from "@/store/auth";
 import { useUIStore } from "@/store/ui";
 import Button from "@/components/ui/Button";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 // Constants
 const ROLE_TO_DASHBOARD = Object.freeze({
   admin: "/dashboard/admin",

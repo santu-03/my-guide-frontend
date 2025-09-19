@@ -12,14 +12,11 @@ export default {
         glass: "rgba(255, 255, 255, 0.1)",   // 👈 custom transparent white
         darkGlass: "rgba(0, 0, 0, 0.3)",     // 👈 custom transparent black
       },
-<<<<<<< HEAD
       scrollbar: {
         width: '.8px',
         thumb: '#4b8c4b',
         track: '#f1f1f1',
       },
-=======
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
       backdropBlur: {
         xs: '2px',
       },
