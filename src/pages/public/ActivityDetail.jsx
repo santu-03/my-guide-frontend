@@ -1,35 +1,55 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Star,
-  Clock,
-  Users,
-  MapPin,
-  Calendar,
-  Heart,
-  Share2,
-  CheckCircle,
-  X,
-  ArrowLeft,
-  Award,
-  Shield,
-  RefreshCw,
-  MessageCircle,
-  Camera,
-  Wifi,
-  Car,
-  Coffee,
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  Play
+  Star, Clock, Users, MapPin, Heart, Share2, ArrowLeft,
+  Award, Shield, AlertCircle, ChevronLeft, ChevronRight, CheckCircle
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { SkeletonCard } from '@/components/ui/LoadingSkeleton';
 import Button from '@/components/ui/Button';
 import { useAuthStore } from '@/store/auth';
-import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
+/* -------- Inline Axios client with token auth (no lib import) -------- */
+const API_BASE =
+  import.meta.env.VITE_BACKEND_URL ||
+  import.meta.env.VITE_API_URL ||
+  'http://localhost:5000/api';
+
+const TOKEN_KEYS = [
+  'token','accessToken','jwt','adminToken','superadminToken',
+  'vendorToken','managerToken','userToken'
+];
+
+function getStoredToken() {
+  for (const k of TOKEN_KEYS) {
+    const raw = localStorage.getItem(k);
+    if (!raw) continue;
+    try {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'string') return parsed;
+      return (
+        parsed?.token || parsed?.accessToken ||
+        parsed?.data?.token || parsed?.data?.accessToken || null
+      );
+    } catch {
+      return raw;
+    }
+  }
+  try {
+    const u = JSON.parse(localStorage.getItem('user') || 'null');
+    return u?.token || u?.accessToken || null;
+  } catch { return null; }
+}
+
+const API = axios.create({ baseURL: API_BASE, withCredentials: true });
+API.interceptors.request.use((config) => {
+  const t = getStoredToken();
+  if (t) config.headers.Authorization = `Bearer ${t}`;
+  return config;
+});
+/* --------------------------------------------------------------------- */
 
 const ActivityDetail = () => {
   const { id } = useParams();

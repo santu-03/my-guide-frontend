@@ -1,39 +1,39 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
-  Star,
-  MapPin,
-  Heart,
-  Share2,
-  ArrowLeft,
-  Calendar,
-  Users,
-  Clock,
-  Camera,
-  Award,
-  TrendingUp,
-  CheckCircle,
-  Shield,
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  Navigation,
-  Phone,
-  Globe,
-  Wifi,
-  Car,
-  Coffee,
-  Utensils,
-  ShoppingBag,
-  Info,
-  ExternalLink
+  Star, MapPin, Heart, Share2, ArrowLeft, Calendar, Users, Clock, Camera,
+  Award, TrendingUp, CheckCircle, Shield, AlertCircle, ChevronLeft, ChevronRight,
+  Navigation, Info
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { SkeletonCard } from '@/components/ui/LoadingSkeleton';
 import Button from '@/components/ui/Button';
 import { useAuthStore } from '@/store/auth';
-import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
+/* -------- Inline Axios client with token auth -------- */
+const API_BASE =
+  import.meta.env.VITE_BACKEND_URL ||
+  import.meta.env.VITE_API_URL ||
+  'http://localhost:5000/api';
+
+const TOKEN_KEYS = ['token','accessToken','jwt','adminToken','superadminToken','vendorToken','managerToken','userToken'];
+const getStoredToken = () => {
+  for (const k of TOKEN_KEYS) {
+    const raw = localStorage.getItem(k); if (!raw) continue;
+    try { const p = JSON.parse(raw); return typeof p === 'string' ? p : (p?.token || p?.accessToken || p?.data?.token || p?.data?.accessToken || null); }
+    catch { return raw; }
+  }
+  try { const u = JSON.parse(localStorage.getItem('user') || 'null'); return u?.token || u?.accessToken || null; }
+  catch { return null; }
+};
+
+const API = axios.create({ baseURL: API_BASE, withCredentials: true });
+API.interceptors.request.use((config) => {
+  const t = getStoredToken(); if (t) config.headers.Authorization = `Bearer ${t}`; return config;
+});
+/* ----------------------------------------------------- */
 
 const PlaceDetail = () => {
   const { id } = useParams();

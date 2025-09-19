@@ -1,22 +1,34 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import {
-  Search as SearchIcon,
-  SlidersHorizontal,
-  Grid3X3,
-  List,
-  ChevronDown,
-  X,
-  ArrowRight,
-  TrendingUp,
-  MapPin,
-  Star,
-  Clock,
-} from 'lucide-react';
+import { Search as SearchIcon, SlidersHorizontal, Grid3X3, List, ChevronDown, X, MapPin, Star, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { SkeletonList } from '@/components/ui/LoadingSkeleton';
 import Button from '@/components/ui/Button';
-import api from '@/lib/api';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
+/* -------- Inline Axios client with token auth -------- */
+const API_BASE =
+  import.meta.env.VITE_BACKEND_URL ||
+  import.meta.env.VITE_API_URL ||
+  'http://localhost:5000/api';
+
+const TOKEN_KEYS = ['token','accessToken','jwt','adminToken','superadminToken','vendorToken','managerToken','userToken'];
+const getStoredToken = () => {
+  for (const k of TOKEN_KEYS) {
+    const raw = localStorage.getItem(k); if (!raw) continue;
+    try { const p = JSON.parse(raw); return typeof p === 'string' ? p : (p?.token || p?.accessToken || p?.data?.token || p?.data?.accessToken || null); }
+    catch { return raw; }
+  }
+  try { const u = JSON.parse(localStorage.getItem('user') || 'null'); return u?.token || u?.accessToken || null; }
+  catch { return null; }
+};
+
+const API = axios.create({ baseURL: API_BASE, withCredentials: true });
+API.interceptors.request.use((config) => {
+  const t = getStoredToken(); if (t) config.headers.Authorization = `Bearer ${t}`; return config;
+});
+/* ----------------------------------------------------- */
 
 const SORT_OPTIONS = [
   { value: 'relevance', label: 'Most Relevant' },
