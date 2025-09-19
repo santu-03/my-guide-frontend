@@ -1,19 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root { color-scheme: light dark; }
 body { @apply text-gray-900 dark:text-gray-100; }
-<<<<<<< HEAD
-
-
-
 
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
   width: .8px; /* Change the width of the scrollbar */
 }
-
 ::-webkit-scrollbar-thumb {
   background-color: #4b8c4b00; /* Change the thumb color */
   border-radius: 10px; /* Rounded corners for the scrollbar thumb */
@@ -41,5 +35,3 @@ body { @apply text-gray-900 dark:text-gray-100; }
 .dark ::-webkit-scrollbar-track {
   background-color: #3a3a3a; /* Darker track color in dark mode */
 }
-=======
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0

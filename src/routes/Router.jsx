@@ -31,11 +31,7 @@ import PlaceList from "@/pages/admin/PlaceList";
 import PlaceCreate from "@/pages/admin/PlaceCreate";
 import ActivityList from "@/pages/admin/ActivityList";
 import ActivityCreate from "@/pages/admin/ActivityCreate";
-<<<<<<< HEAD
 import UsersList from "@/pages/admin/UsersList"; 
-=======
-import UsersList from "@/pages/admin/UsersList"; // Added import
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 
 /* ---------- Route guards ---------- */
 import ProtectedRoute from "./ProtectedRoute";

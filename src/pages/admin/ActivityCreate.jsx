@@ -21,7 +21,6 @@ import {
 import toast from 'react-hot-toast';
 
 /* ---------------- local API (aligned with your backend) ---------------- */
-<<<<<<< HEAD
 const API_BASE =
   import.meta.env.VITE_BACKEND_URL ||
   import.meta.env.VITE_API_URL ||
@@ -29,15 +28,6 @@ const API_BASE =
 
 const api = axios.create({ baseURL: API_BASE });
 
-=======
-const API_BASE = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-const api = axios.create({ baseURL: API_BASE });
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 
 // Activities
 async function createActivity(payload) {

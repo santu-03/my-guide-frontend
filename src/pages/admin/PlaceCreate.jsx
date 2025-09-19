@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import axios from 'axios';
-=======
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 import DashboardLayout from '@/components/Layout/DashboardLayout';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -17,7 +14,6 @@ import {
   Globe,
   Loader2,
 } from 'lucide-react';
-<<<<<<< HEAD
 import toast from 'react-hot-toast';
 
 /* ---------------- Local API (same pattern as ActivityCreate) ---------------- */
@@ -75,15 +71,6 @@ function useAuthStore() {
   }
 }
 /* -------------------------------------------------------------------------- */
-=======
-import { useAuthStore } from '@/store/auth';
-import toast from 'react-hot-toast';
-
-// ✅ API methods (Mongo-connected)
-import { createPlace } from '@/lib/places';
-// Optional: if you have a dedicated upload endpoint:
-// import { uploadImage } from '@/lib/uploads';
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 
 export default function PlaceCreate() {
   const navigate = useNavigate();
@@ -99,13 +86,8 @@ export default function PlaceCreate() {
     tags: '',
   });
 
-<<<<<<< HEAD
   // Files + previews
   const [files, setFiles] = useState([]);       // File[]
-=======
-  // We keep both: selected File objects (for FormData) and preview URLs for UI
-  const [files, setFiles] = useState([]); // File[]
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
   const [previews, setPreviews] = useState([]); // [{id, url, name}]
   const [dragActive, setDragActive] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -144,7 +126,6 @@ export default function PlaceCreate() {
   };
 
   const appendFiles = (fileList) => {
-<<<<<<< HEAD
     const arr = Array.from(fileList || []);
     if (!arr.length) return;
 
@@ -157,16 +138,6 @@ export default function PlaceCreate() {
       ...previews,
       ...arr.map((file, i) => ({
         id: `${Date.now()}-${i}-${file.name}`,
-=======
-    const arr = Array.from(fileList);
-    if (!arr.length) return;
-
-    const nextFiles = [...files, ...arr];
-    const nextPreviews = [
-      ...previews,
-      ...arr.map((file, index) => ({
-        id: `${Date.now()}-${index}`,
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
         url: URL.createObjectURL(file),
         name: file.name,
       })),
@@ -183,29 +154,15 @@ export default function PlaceCreate() {
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
-<<<<<<< HEAD
     if (e.type === 'dragenter' || e.type === 'dragover') setDragActive(true);
     if (e.type === 'dragleave') setDragActive(false);
-=======
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-<<<<<<< HEAD
     if (e.dataTransfer.files?.length) appendFiles(e.dataTransfer.files);
-=======
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      appendFiles(e.dataTransfer.files);
-    }
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
   };
 
   const removePreviewAt = (idx) => {
@@ -229,7 +186,6 @@ export default function PlaceCreate() {
       // Build FormData for backend (supports file uploads)
       const fd = new FormData();
       fd.append('name', form.name.trim());
-<<<<<<< HEAD
       fd.append('description', (form.description || '').trim());
       fd.append('category', (form.category || '').trim());
       fd.append('city', form.city.trim());
@@ -249,27 +205,6 @@ export default function PlaceCreate() {
 
       toast.success('Place created successfully!');
       navigate('/admin/places'); // ✅ go back to listing
-=======
-      fd.append('description', form.description.trim());
-      fd.append('category', form.category.trim());
-      fd.append('city', form.city.trim());
-      fd.append('country', form.country.trim());
-      fd.append('featured', String(form.featured));
-      if (form.tags) {
-        form.tags
-          .split(',')
-          .map((t) => t.trim())
-          .filter(Boolean)
-          .forEach((tag) => fd.append('tags[]', tag));
-      }
-      files.forEach((f) => fd.append('images', f)); // backend should parse as array
-
-      // Hit your API
-      await createPlace(fd);
-
-      toast.success('Place created successfully!');
-      navigate('/admin/places');
->>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
     } catch (err) {
       console.error('Create place error:', err);
       const msg =
