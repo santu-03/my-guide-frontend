@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light dark; }
+body { @apply text-gray-900 dark:text-gray-100; }
+
+
+
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: .8px; /* Change the width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b8c4b00; /* Change the thumb color */
+  border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #2d6a2d; /* Darker thumb color on hover */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Light track color */
+  border-radius: 10px; /* Rounded corners for the scrollbar track */
+}
+
+/* For dark mode (if applicable) */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #88b88b; /* Darker color for dark mode */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #3d6a3d; /* Darker thumb color on hover in dark mode */
+}
+
+.dark ::-webkit-scrollbar-track {
+  background-color: #3a3a3a; /* Darker track color in dark mode */
+}
