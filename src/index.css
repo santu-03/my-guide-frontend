@@ -37,3 +37,16 @@ body { @apply text-gray-900 dark:text-gray-100; }
 .dark ::-webkit-scrollbar-track {
   background-color: #3a3a3a;
 }
+
+:root {
+  --brand: #f25533;        /* coral-like primary */
+  --brand-dark: #d64527;
+  --ink: #111827;          /* gray-900 */
+  --muted: #6b7280;        /* gray-500 */
+  --surface: #ffffff;
+  --success: #16a34a;
+  --warning: #f59e0b;
+}
+
+/* optional: tighten line-heights a bit for card content */
+.gyg-tight { line-height: 1.25; }

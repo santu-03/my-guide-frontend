@@ -3,7 +3,46 @@ import { useLocation, useNavigate, useSearchParams, Link } from "react-router-do
 import { AlertTriangle, Calendar, Users, Mail, Phone, User, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import api from "@/lib/api";
+import axios from 'axios';
+
+/* ---------------- Inline Axios client with token auth ---------------- */
+const API_BASE =
+  import.meta.env.VITE_BACKEND_URL ||
+  import.meta.env.VITE_API_URL ||
+  'http://localhost:5000/api';
+
+const TOKEN_KEYS = [
+  'token','accessToken','jwt','adminToken','superadminToken',
+  'vendorToken','managerToken','userToken',
+];
+
+function getStoredToken() {
+  for (const k of TOKEN_KEYS) {
+    const raw = localStorage.getItem(k);
+    if (!raw) continue;
+    try {
+      const p = JSON.parse(raw);
+      if (typeof p === 'string') return p;
+      return (
+        p?.token || p?.accessToken ||
+        p?.data?.token || p?.data?.accessToken || null
+      );
+    } catch {
+      return raw; // plain string
+    }
+  }
+  try {
+    const u = JSON.parse(localStorage.getItem('user') || 'null');
+    return u?.token || u?.accessToken || null;
+  } catch { return null; }
+}
+
+const API = axios.create({ baseURL: API_BASE, withCredentials: true });
+API.interceptors.request.use((config) => {
+  const t = getStoredToken();
+  if (t) config.headers.Authorization = `Bearer ${t}`;
+  return config;
+});
 
 /** Helper: ensure document is admin-uploaded & approved */
 const isAdminApproved = (doc) =>
