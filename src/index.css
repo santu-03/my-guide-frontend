@@ -4,6 +4,7 @@
 
 :root { color-scheme: light dark; }
 body { @apply text-gray-900 dark:text-gray-100; }
+<<<<<<< HEAD
 
 
 
@@ -40,3 +41,5 @@ body { @apply text-gray-900 dark:text-gray-100; }
 .dark ::-webkit-scrollbar-track {
   background-color: #3a3a3a; /* Darker track color in dark mode */
 }
+=======
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0

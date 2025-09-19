@@ -3,7 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home, Menu, X, LogOut, Settings, Users, ClipboardList, Calendar,
   MapPin, DollarSign, BarChart3, CreditCard, Layers, Heart, 
+<<<<<<< HEAD
   BookOpen, Star, MessageCircle, Shield, ChevronLeft, HelpCircle
+=======
+  BookOpen, Star, MessageCircle, Shield
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 
@@ -82,15 +86,23 @@ const NAVIGATION_CONFIG = {
 
 const COMMON_ACTIONS = [
   { to: "/settings", label: "Settings", icon: Settings },
+<<<<<<< HEAD
   { to: "/help", label: "Help & Support", icon: HelpCircle },
+=======
+  { to: "/help", label: "Help & Support", icon: MessageCircle },
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 ];
 
 export default function Sidebar({ 
   role = "traveller", 
   variant = "light",
+<<<<<<< HEAD
   className = "",
   extra = null,
   defaultCollapsed = false
+=======
+  className = ""
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -99,7 +111,11 @@ export default function Sidebar({
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(() => {
     const saved = localStorage.getItem("sidebar-collapsed");
+<<<<<<< HEAD
     return saved ? JSON.parse(saved) : defaultCollapsed;
+=======
+    return saved ? JSON.parse(saved) : false;
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
   });
 
   // Save collapsed state to localStorage
@@ -125,6 +141,7 @@ export default function Sidebar({
   // Get navigation items for current role
   const navigationItems = NAVIGATION_CONFIG[role] || NAVIGATION_CONFIG.traveller;
 
+<<<<<<< HEAD
   // Get dashboard route for role
   const getDashboardRoute = () => {
     switch (role) {
@@ -139,15 +156,25 @@ export default function Sidebar({
 
   // Base classes with sticky positioning
   const sidebarClasses = `
+=======
+  // Style classes
+  const sidebarClasses = `
+    fixed md:static top-0 left-0 h-full z-40 flex flex-col
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
     ${isCollapsed ? "w-20" : "w-64"} 
     ${variant === "dark" 
       ? "bg-gray-900 text-gray-200 border-r border-gray-800" 
       : "bg-white text-gray-800 border-r border-gray-200 shadow-sm"
     }
+<<<<<<< HEAD
     transition-all duration-300 ease-in-out
     ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
     md:sticky md:top-0 md:h-screen md:z-10
     fixed inset-y-0 left-0 z-40 md:translate-x-0
+=======
+    transform transition-all duration-300 ease-in-out
+    ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
     ${className}
   `.trim();
 
@@ -211,6 +238,7 @@ export default function Sidebar({
       {/* Sidebar */}
       <aside className={sidebarClasses}>
         
+<<<<<<< HEAD
         {/* Header with Logo and Collapse Toggle */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800">
           <Link 
@@ -226,11 +254,30 @@ export default function Sidebar({
               alt="TourGuide Logo"
               className="w-10 h-auto group-hover:scale-105 transition-transform"
               onError={(e) => { e.currentTarget.src = "/default-logo.png"; }}
+=======
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+          <Link 
+            to="/" 
+            className={`flex items-center gap-3 font-bold text-lg hover:opacity-80 transition-opacity ${
+              isCollapsed ? "justify-center" : ""
+            }`}
+            onClick={() => setIsOpen(false)}
+          >
+            {/* <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white shadow-lg">
+              <span className="font-extrabold">TG</span>
+            </div> */}
+            <img
+              src="/images/LOGO2.png"   
+              alt="TourGuide Logo"
+              className="w-12 h-auto  group-hover:scale-105 transition-transform"
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
             />
             {!isCollapsed && (
               <span className="text-gray-900 dark:text-white">MyGuide</span>
             )}
           </Link>
+<<<<<<< HEAD
 
           {/* Desktop collapse toggle */}
           <button
@@ -315,6 +362,67 @@ export default function Sidebar({
               {!isCollapsed && <span className="font-medium">Sign Out</span>}
             </button>
           </div>
+=======
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+          {/* Primary navigation */}
+          {renderNavigationGroup("Main", navigationItems.primary)}
+          
+          {/* Secondary navigation */}
+          {navigationItems.secondary && navigationItems.secondary.length > 0 && (
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
+              {renderNavigationGroup("Quick Access", navigationItems.secondary)}
+            </div>
+          )}
+
+          {/* Common actions */}
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
+            {renderNavigationGroup("Support", COMMON_ACTIONS, false)}
+          </div>
+        </nav>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
+          
+          {/* User info */}
+          {user && !isCollapsed && (
+            <div className="flex items-center gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-sm font-semibold">
+                {user.name?.charAt(0)?.toUpperCase() || "U"}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                  {user.name}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                  {user.role}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Logout button */}
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors ${
+              isCollapsed ? "justify-center" : ""
+            }`}
+            title={isCollapsed ? "Sign Out" : undefined}
+          >
+            <LogOut className="h-5 w-5 flex-shrink-0" />
+            {!isCollapsed && <span className="font-medium">Sign Out</span>}
+          </button>
+
+          {/* Collapse toggle */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="hidden md:flex w-full items-center justify-center p-2 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors border-t border-gray-200 dark:border-gray-800 mt-2 pt-2"
+          >
+            {isCollapsed ? "→ Expand" : "← Collapse"}
+          </button>
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
         </div>
       </aside>
     </>

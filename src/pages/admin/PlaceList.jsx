@@ -1,7 +1,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import axios from "axios";
 
+=======
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
@@ -20,6 +23,7 @@ import {
   RefreshCw,
   Loader2,
 } from "lucide-react";
+<<<<<<< HEAD
 import toast from "react-hot-toast";
 
 /* -------------------------- local API (same as ActivityList) -------------------------- */
@@ -80,6 +84,14 @@ function useAuthStore() {
   }
 }
 /* -------------------------------------------------------------------------------------- */
+=======
+import { useAuthStore } from "@/store/auth";
+import toast from "react-hot-toast";
+
+// ✅ API methods (Mongo-connected)
+import { getPlaces, updatePlace, deletePlace } from "@/lib/places";
+import { getActivities } from "@/lib/activities";
+>>>>>>> 4aaf08ad57bfe341382432d957ec3746b55e0cd0
 
 export default function PlaceList() {
   const { user } = useAuthStore();
