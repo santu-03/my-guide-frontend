@@ -629,9 +629,10 @@ API.interceptors.request.use((config) => {
 
 /* ----------------------------- helpers (top) ----------------------------- */
 const heroImages = [
-  "/images/Howrah-Bridge.jpg",
   "/images/Pareshnath-Jain-Temple.jpg",
   "/images/Victoria-Memorial.jpg",
+  "/images/sea.jpg",
+  "/images/mountain.jpg",
 ];
 
 // Normalize different backend shapes into a flat array
