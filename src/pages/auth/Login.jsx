@@ -135,9 +135,9 @@ const Login = () => {
   // Demo login function
   const handleDemoLogin = async (role = 'traveller') => {
     const demoCredentials = {
-      traveller: { email: 'demo@traveller.com', password: 'demo123' },
-      guide: { email: 'demo@guide.com', password: 'demo123' },
-      instructor: { email: 'demo@instructor.com', password: 'demo123' }
+      traveller: { email: 'demo@traveller.com', password: 'admin@123' },
+      guide: { email: 'demo@guide.com', password: 'admin@123' },
+      instructor: { email: 'demo@instructor.com', password: 'admin@123' }
     };
 
     const credentials = demoCredentials[role];

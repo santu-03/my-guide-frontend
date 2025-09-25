@@ -2,16 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light dark; }
-body { @apply text-gray-900 dark:text-gray-100; }
+:root {
+  color-scheme: light dark;
+  --brand: #f25533;
+  --brand-dark: #d64527;
+  --ink: #111827;
+  --muted: #6b7280;
+  --surface: #ffffff;
+  --success: #16a34a;
+  --warning: #f59e0b;
+}
 
-/* Custom Scrollbar Styles */
+/* Dark Mode Text Handling */
+body {
+  @apply text-gray-900 dark:text-gray-100;
+}
+
+/* Optional Utility Class */
+.gyg-tight {
+  line-height: 1.25;
+}
+
+/* Scrollbar Styles */
 ::-webkit-scrollbar {
-  width: 8px; /* Adjust width */
+  width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(75, 140, 75, 0); /* or transparent */
+  background-color: rgba(75, 140, 75, 0); /* transparent initially */
   border-radius: 10px;
   transition: background-color 0.3s ease;
 }
@@ -25,7 +43,7 @@ body { @apply text-gray-900 dark:text-gray-100; }
   border-radius: 10px;
 }
 
-/* Dark mode */
+/* Dark mode scrollbar tweaks */
 .dark ::-webkit-scrollbar-thumb {
   background-color: #88b88b;
 }
@@ -37,16 +55,3 @@ body { @apply text-gray-900 dark:text-gray-100; }
 .dark ::-webkit-scrollbar-track {
   background-color: #3a3a3a;
 }
-
-:root {
-  --brand: #f25533;        /* coral-like primary */
-  --brand-dark: #d64527;
-  --ink: #111827;          /* gray-900 */
-  --muted: #6b7280;        /* gray-500 */
-  --surface: #ffffff;
-  --success: #16a34a;
-  --warning: #f59e0b;
-}
-
-/* optional: tighten line-heights a bit for card content */
-.gyg-tight { line-height: 1.25; }

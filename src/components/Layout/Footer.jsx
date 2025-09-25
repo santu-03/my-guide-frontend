@@ -117,7 +117,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-black text-gray-300" role="contentinfo">
+    <footer className="bg-gradient-to-b from-white-900 to-white text-black-300" role="contentinfo">
       
       {/* Newsletter Section */}
       <section className="max-w-7xl mx-auto px-6 py-12 border-b border-gray-800" aria-labelledby="newsletter-heading">
@@ -198,10 +198,18 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-2 lg:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-6 group">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg group-hover:scale-105 transition-transform">
+              {/* <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg group-hover:scale-105 transition-transform">
                 TG
               </div>
-              <span className="font-bold text-2xl text-white">MyGuide</span>
+              <span className="font-bold text-2xl text-white">MyGuide</span> */}
+              <img
+              src="/images/LOGO2.png"   
+              alt="TourGuide Logo"
+              className="w-12 h-auto  group-hover:scale-105 transition-transform"
+            />
+            <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">
+              MyGuide
+            </span>
             </Link>
             
             <p className="text-gray-400 leading-relaxed mb-6 max-w-md">

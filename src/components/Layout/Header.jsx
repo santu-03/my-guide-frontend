@@ -30,7 +30,7 @@ const PREMIUM_GHOST_CLASSES =
 
 const TRENDING_SEARCHES = Object.freeze([
   "Victoria Memorial", "Howrah Bridge", "Dakshineswar Kali Temple",
-  "VScience City", "Eco Park", "Alipore Zoo",
+  "Science City", "Eco Park", "Alipore Zoo",
 ]);
 
 const SEED_SUGGESTIONS = Object.freeze([
@@ -411,7 +411,7 @@ function Header() {
 
 
           {/* Search (desktop) */}
-          <div ref={searchWrapRef} className="hidden md:flex flex-1 max-w-lg mx-8 relative">
+          {/* <div ref={searchWrapRef} className="hidden md:flex flex-1 max-w-lg mx-8 relative">
             <form
               className="w-full relative"
               onSubmit={handleSearchSubmit}
@@ -440,7 +440,18 @@ function Header() {
               activeIndex={activeIndex}
               onSetActiveIndex={setActiveIndex}
             />
-          </div>
+          </div> */}
+          {/* <div ref={searchWrapRef} className="hidden md:flex flex-1 max-w-lg mx-8 relative">
+          <Button
+              as={Link}
+              to="/auth/signup"
+              size="lg"
+              variant="outline"
+              className="border-purple text-black hover:bg-black hover:text-primary-600"
+            >
+              Become a Guide
+            </Button>
+            </div> */}
 
           {/* Right actions */}
           <div className="flex items-center space-x-3 sm:space-x-4">

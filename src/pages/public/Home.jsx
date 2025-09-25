@@ -1075,7 +1075,7 @@ function PlaceCard({ place }) {
   const count = place.rating?.count;
 
   return (
-    <Link to={`/places/${place._id}`} className="group block" aria-label={`Explore ${title}`}>
+    <Link to={`/places/${place._id || place.id}`} className="group block" aria-label={`Explore ${title}`}>
       <Card className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 hover:shadow-md transition-all">
         <div className="relative h-52 bg-gradient-to-br from-gray-200 to-gray-100">
           {place.featured && (
@@ -1123,7 +1123,7 @@ function ActivityCard({ activity }) {
   const count = activity.rating?.count;
 
   return (
-    <Link to={`/activities/${activity._id}`} className="group block" aria-label={`Book ${title}`}>
+    <Link to={`/activities/${activity._id || activity.id}`} className="group block" aria-label={`Book ${title}`}>
       <Card className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 hover:shadow-md transition-all">
         <div className="relative h-44 bg-gradient-to-br from-gray-200 to-gray-100">
           {/* category/emoji “image” */}

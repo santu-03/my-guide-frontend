@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 // get your guide 
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
