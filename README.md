@@ -1,4 +1,4 @@
-# 🧭 Tour Guide Frontend
+# 🧭 My Guide Frontend
 
 A sleek, performant SPA for discovering tours, booking trips, and managing profiles — built with **React**, **Vite**, and **Tailwind CSS**. Optimized for fast loads, modern DX, and smooth integration with the backend API.
 
