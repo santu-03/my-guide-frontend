@@ -777,7 +777,7 @@ export default function Home() {
     <div className="space-y-16 ">
       {/* Page overlay loader (simple, inline, no new file) */}
       {showPageLoader && (
-        <div className="fixed inset-0 z-40 grid place-items-center bg-white/70 backdrop-blur-sm">
+        <div className="fixed inset-0 z-40 grid place-items-center bg-black/70 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-3">
             <div className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-primary-600 animate-spin" />
             <p className="text-sm text-gray-600">Loading experiences…</p>

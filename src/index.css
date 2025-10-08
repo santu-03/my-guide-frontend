@@ -6,9 +6,11 @@
   color-scheme: light dark;
   --brand: #f25533;
   --brand-dark: #d64527;
-  --ink: #111827;
-  --muted: #6b7280;
-  --surface: #ffffff;
+  /* --ink: #111827; */
+  --ink: #9787F3;
+  --muted: #2D274B;
+  /* --surface: #ffffff; */
+  --surface: #EAEFFE;
   --success: #16a34a;
   --warning: #f59e0b;
 }

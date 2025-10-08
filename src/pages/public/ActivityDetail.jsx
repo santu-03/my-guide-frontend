@@ -769,6 +769,7 @@
 
 
 // get your guide 
+import { useState, useCallback, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Star, MapPin, Clock, Users, CheckCircle2, ArrowRight, Share2, Heart, ShieldCheck, BadgeCheck,
