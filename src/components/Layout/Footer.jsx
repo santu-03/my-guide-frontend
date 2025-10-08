@@ -120,76 +120,7 @@ const Footer = () => {
     <footer className="bg-gradient-to-b from-white-900 to-white text-black-300" role="contentinfo">
       
       {/* Newsletter Section */}
-      <section className="max-w-7xl mx-auto px-6 py-12 border-b border-gray-800" aria-labelledby="newsletter-heading">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-          
-          {/* Newsletter Content */}
-          <div className="text-center lg:text-left">
-            <h2 id="newsletter-heading" className="text-3xl font-bold text-white mb-2">
-              Stay Inspired ✨
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Get exclusive travel deals, insider tips, and destination guides delivered to your inbox.
-            </p>
-          </div>
-
-          {/* Newsletter Form */}
-          <form 
-            onSubmit={handleNewsletterSubmit} 
-            className="w-full max-w-md"
-            aria-label="Newsletter subscription"
-          >
-            <div className="flex bg-gray-800 rounded-xl overflow-hidden shadow-lg">
-              <div className="relative flex-1">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={isLoading || isSubscribed}
-                  className="w-full bg-transparent pl-11 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset disabled:opacity-50"
-                  aria-describedby={error ? "email-error" : undefined}
-                />
-              </div>
-              <Button 
-                type="submit" 
-                disabled={isLoading || isSubscribed}
-                className="bg-primary-600 hover:bg-primary-700 disabled:bg-primary-800 px-6 text-sm font-semibold flex items-center gap-2 transition-colors"
-              >
-                {isLoading ? (
-                  "Subscribing..."
-                ) : isSubscribed ? (
-                  <>
-                    <Check className="h-4 w-4" />
-                    Subscribed!
-                  </>
-                ) : (
-                  <>
-                    Subscribe
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-            
-            {/* Error message */}
-            {error && (
-              <p id="email-error" className="mt-2 text-sm text-red-400" role="alert">
-                {error}
-              </p>
-            )}
-            
-            {/* Success message */}
-            {isSubscribed && (
-              <p className="mt-2 text-sm text-green-400" role="status">
-                Thanks for subscribing! Check your email for confirmation.
-              </p>
-            )}
-          </form>
-        </div>
-      </section>
+      
 
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -278,34 +209,83 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800 bg-black/50">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-            
-            {/* Copyright */}
-            <p>
-              © {currentYear} MyGuide, Inc. All rights reserved.
-            </p>
 
-            {/* Legal Links */}
-            <nav aria-label="Legal navigation">
-              <ul className="flex gap-6">
-                {legalLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link 
-                      to={link.href} 
-                      className="hover:text-white transition-colors duration-200"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+      <section className="max-w-7xl mx-auto px-6 py-12 border-b border-gray-800" aria-labelledby="newsletter-heading">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+          
+          {/* Newsletter Content */}
+          <div className="text-center lg:text-left">
+            <h2 id="newsletter-heading" className="text-3xl font-bold text-white mb-2">
+              Stay Inspired ✨
+            </h2>
+            <p className="text-gray-400 text-lg">
+              Get exclusive travel deals, insider tips, and destination guides delivered to your inbox.
+            </p>
           </div>
+
+          {/* Newsletter Form */}
+          <form 
+            onSubmit={handleNewsletterSubmit} 
+            className="w-full max-w-md"
+            aria-label="Newsletter subscription"
+          >
+            <div className="flex bg-transperent border border-purple-500 rounded-xl overflow-hidden shadow-lg">
+              <div className="relative flex-1">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={isLoading || isSubscribed}
+                  className="w-full bg-transparent pl-11 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset disabled:opacity-50"
+                  aria-describedby={error ? "email-error" : undefined}
+                />
+              </div>
+              <Button 
+                type="submit" 
+                disabled={isLoading || isSubscribed}
+                className="bg-primary-600 hover:bg-primary-700 disabled:bg-primary-800 px-6 text-sm font-semibold flex items-center gap-2 transition-colors"
+              >
+                {isLoading ? (
+                  "Subscribing..."
+                ) : isSubscribed ? (
+                  <>
+                    <Check className="h-4 w-4" />
+                    Subscribed!
+                  </>
+                ) : (
+                  <>
+                    Subscribe
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </div>
+            
+            {/* Error message */}
+            {error && (
+              <p id="email-error" className="mt-2 text-sm text-red-400" role="alert">
+                {error}
+              </p>
+            )}
+            
+            {/* Success message */}
+            {isSubscribed && (
+              <p className="mt-2 text-sm text-green-400" role="status">
+                Thanks for subscribing! Check your email for confirmation.
+              </p>
+            )}
+          </form>
         </div>
-      </div>
+      </section>
+
+
+
+
+      {/* Bottom Bar */}
+      
     </footer>
   );
 };
