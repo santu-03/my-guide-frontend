@@ -1,7 +1,5 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import Button from "@/components/ui/Button";
@@ -21,24 +19,11 @@ import {
   RefreshCw,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { api, useAuthStore } from '@/store/auth'; // ✅ Centralized import
 
-/* -------------------------- local API (no lib/, store/) -------------------------- */
-const API_BASE =
-  import.meta.env.VITE_BACKEND_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000/api";
-
-const api = axios.create({ baseURL: API_BASE });
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-// Fetch activities (server-side filter/sort if your backend supports it)
+/* =============== API helpers =============== */
 async function getActivities(params = {}) {
   const { data } = await api.get("/activities", { params });
-  // Accept common shapes: {activities:[]}, {data:{activities:[]}}, {docs:[]}, []
   return (
     data?.activities ||
     data?.data?.activities ||
@@ -49,29 +34,17 @@ async function getActivities(params = {}) {
   );
 }
 
-// Delete one
 async function deleteActivity(id) {
   return api.delete(`/activities/${id}`);
 }
 
-// Update fields (generic)
 async function updateActivity(id, patch) {
   return api.patch(`/activities/${id}`, patch);
 }
 
-// Places list for lookup of names
 async function getPlaces({ limit = 200 } = {}) {
   const { data } = await api.get("/places", { params: { limit } });
   return data?.places || data?.data?.places || data?.docs || data || [];
-}
-
-// Minimal shim so we can pass `user` into the layout
-function useAuthStore() {
-  try {
-    return { user: JSON.parse(localStorage.getItem("user") || "null") };
-  } catch {
-    return { user: null };
-  }
 }
 
 /* -------------------------------------------------------------------------------- */

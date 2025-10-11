@@ -1,6 +1,78 @@
+// import { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import DashboardLayout from '@/components/Layout/DashboardLayout';
+// import Button from '@/components/ui/Button';
+// import { Card, CardContent } from '@/components/ui/Card';
+// import {
+//   Upload,
+//   X,
+//   MapPin,
+//   Star,
+//   Save,
+//   ArrowLeft,
+//   Globe,
+//   Loader2,
+// } from 'lucide-react';
+// import toast from 'react-hot-toast';
+
+// /* ---------------- Local API (same pattern as ActivityCreate) ---------------- */
+// const API_BASE =
+//   import.meta.env.VITE_BACKEND_URL ||
+//   import.meta.env.VITE_API_URL ||
+//   'http://localhost:5000/api';
+
+// const api = axios.create({ baseURL: API_BASE });
+
+// // If your backend sets httpOnly cookies for auth, uncomment the next line:
+// // api.defaults.withCredentials = true;
+
+// const TOKEN_KEYS = [
+//   'token',
+//   'adminToken',
+//   'superadminToken',
+//   'vendorToken',
+//   'managerToken',
+//   'userToken',
+// ];
+
+// // Attach Authorization header
+// api.interceptors.request.use((config) => {
+//   let token = null;
+//   for (const k of TOKEN_KEYS) {
+//     const v = localStorage.getItem(k);
+//     if (v) { token = v; break; }
+//   }
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//     config.headers['x-auth-token'] = token;
+//   }
+//   return config;
+// });
+
+
+
+
+// // POST /places with multipart images and fields
+// async function createPlace(formData) {
+//   return api.post('/places', formData, {
+//     headers: { 'Content-Type': 'multipart/form-data' },
+//   });
+// }
+
+// // Minimal shim for user (no global store)
+// function useAuthStore() {
+//   try {
+//     const user = JSON.parse(localStorage.getItem('user') || 'null');
+//     const isAuthenticated = TOKEN_KEYS.some((k) => !!localStorage.getItem(k));
+//     return { user, isAuthenticated };
+//   } catch {
+//     return { user: null, isAuthenticated: false };
+//   }
+// }
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import DashboardLayout from '@/components/Layout/DashboardLayout';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -15,61 +87,39 @@ import {
   Loader2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { api, useAuthStore } from '@/store/auth'; // ✅ Centralized import
 
-/* ---------------- Local API (same pattern as ActivityCreate) ---------------- */
-const API_BASE =
-  import.meta.env.VITE_BACKEND_URL ||
-  import.meta.env.VITE_API_URL ||
-  'http://localhost:5000/api';
-
-const api = axios.create({ baseURL: API_BASE });
-
-// If your backend sets httpOnly cookies for auth, uncomment the next line:
-// api.defaults.withCredentials = true;
-
-const TOKEN_KEYS = [
-  'token',
-  'adminToken',
-  'superadminToken',
-  'vendorToken',
-  'managerToken',
-  'userToken',
-];
-
-// Attach Authorization header
-api.interceptors.request.use((config) => {
-  let token = null;
-  for (const k of TOKEN_KEYS) {
-    const v = localStorage.getItem(k);
-    if (v) { token = v; break; }
-  }
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-    config.headers['x-auth-token'] = token;
-  }
-  return config;
-});
-
-
-
-
-// POST /places with multipart images and fields
+/* =============== API helpers =============== */
 async function createPlace(formData) {
   return api.post('/places', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 }
 
-// Minimal shim for user (no global store)
-function useAuthStore() {
-  try {
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
-    const isAuthenticated = TOKEN_KEYS.some((k) => !!localStorage.getItem(k));
-    return { user, isAuthenticated };
-  } catch {
-    return { user: null, isAuthenticated: false };
-  }
-}
+const categories = [
+  'cultural',
+  'nature',
+  'art',
+  'spiritual',
+  'food',
+  'entertainment',
+  'shopping',
+  'historical',
+  'architectural',
+];
+
+const commonCities = [
+  'Kolkata',
+  'Mumbai',
+  'Delhi',
+  'Bangalore',
+  'Chennai',
+  'Hyderabad',
+  'Pune',
+  'Ahmedabad',
+  'Jaipur',
+  'Goa',
+];
 /* -------------------------------------------------------------------------- */
 
 export default function PlaceCreate() {

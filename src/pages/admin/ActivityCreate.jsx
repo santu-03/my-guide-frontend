@@ -1229,9 +1229,98 @@
 //   );
 // }
 
+// import { useEffect, useState, useCallback } from "react";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+
+// import DashboardLayout from '@/components/Layout/DashboardLayout';
+// import Button from '@/components/ui/Button';
+// import { Card, CardContent } from '@/components/ui/Card';
+// import {
+//   Upload,
+//   X,
+//   MapPin,
+//   Clock,
+//   DollarSign,
+//   Users,
+//   Star,
+//   Eye,
+//   Save,
+//   ArrowLeft,
+//   Loader2,
+// } from 'lucide-react';
+// import toast from 'react-hot-toast';
+
+// /* ================== Auth-aware axios (no UI changes) ================== */
+// import { useAuthStore } from "@/store/auth";
+
+// const API_BASE =
+//   import.meta.env.VITE_API_BASE_URL ||
+//   import.meta.env.VITE_BACKEND_URL ||
+//   import.meta.env.VITE_API_URL ||
+//   "http://localhost:5000/api";
+
+// function getAuthToken() {
+//   try { const s = useAuthStore.getState?.(); if (s?.token) return s.token; } catch {}
+//   return localStorage.getItem("token") || sessionStorage.getItem("token") || null;
+// }
+// const api = axios.create({ baseURL: API_BASE, withCredentials: true });
+// api.interceptors.request.use((cfg) => {
+//   const t = getAuthToken();
+//   if (t) cfg.headers.Authorization = `Bearer ${t}`;
+//   return cfg;
+// });
+// /* ===================================================================== */
+
+// /* ------------------- helpers (do not change UI) ------------------- */
+
+// // 1) Try to find the first array of plain objects anywhere in the response.
+// function findFirstArrayOfObjects(obj) {
+//   if (!obj || typeof obj !== 'object') return [];
+//   if (Array.isArray(obj)) {
+//     return obj.every((x) => x && typeof x === 'object') ? obj : [];
+//   }
+//   for (const k of Object.keys(obj)) {
+//     const found = findFirstArrayOfObjects(obj[k]);
+//     if (found.length) return found;
+//   }
+//   return [];
+// }
+
+// // 2) Normalize "place-like" objects so the existing <select> can use them.
+// function normalizePlaces(arr) {
+//   return (arr || []).map((p) => ({
+//     _id: p._id || p.id || p.uuid || p.slug || '',
+//     id:  p._id || p.id || p.uuid || p.slug || '',
+//     name: p.name || p.title || p.placeName || 'Untitled',
+//     city:
+//       p.city ||
+//       p.location?.city ||
+//       p.address?.city ||
+//       p.meta?.city ||
+//       '',
+//     country:
+//       p.country ||
+//       p.location?.country ||
+//       p.address?.country ||
+//       p.meta?.country ||
+//       '',
+//   })).filter(x => x.id);
+// }
+
+// // Common small helper to pick arrays when API already uses common envelopes
+// const pickArray = (res, pref) => {
+//   const d = res?.data;
+//   if (pref && Array.isArray(d?.[pref])) return d[pref];
+//   return [d?.data, d?.items, d?.results, d?.docs, d?.activities, d?.places, d].find(Array.isArray) || [];
+// };
+
+// const categories = [
+//   'cultural','nature','art','spiritual','food',
+//   'adventure','entertainment','shopping','historical',
+// ];
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import DashboardLayout from '@/components/Layout/DashboardLayout';
 import Button from '@/components/ui/Button';
@@ -1250,31 +1339,19 @@ import {
   Loader2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { api, useAuthStore } from '@/store/auth'; // ✅ Centralized import
 
-/* ================== Auth-aware axios (no UI changes) ================== */
-import { useAuthStore } from "@/store/auth";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_BACKEND_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000/api";
-
-function getAuthToken() {
-  try { const s = useAuthStore.getState?.(); if (s?.token) return s.token; } catch {}
-  return localStorage.getItem("token") || sessionStorage.getItem("token") || null;
+/* =============== API helpers =============== */
+async function createActivity(payload) {
+  return api.post('/activities', payload);
 }
-const api = axios.create({ baseURL: API_BASE, withCredentials: true });
-api.interceptors.request.use((cfg) => {
-  const t = getAuthToken();
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
-/* ===================================================================== */
 
-/* ------------------- helpers (do not change UI) ------------------- */
+async function getPlaces({ limit = 200 } = {}) {
+  const { data } = await api.get('/places', { params: { limit } });
+  return data?.places || data?.data?.places || data?.docs || data || [];
+}
 
-// 1) Try to find the first array of plain objects anywhere in the response.
+// Helper to find first array of objects in response
 function findFirstArrayOfObjects(obj) {
   if (!obj || typeof obj !== 'object') return [];
   if (Array.isArray(obj)) {
@@ -1287,33 +1364,28 @@ function findFirstArrayOfObjects(obj) {
   return [];
 }
 
-// 2) Normalize "place-like" objects so the existing <select> can use them.
+// Normalize places for the select dropdown
 function normalizePlaces(arr) {
   return (arr || []).map((p) => ({
     _id: p._id || p.id || p.uuid || p.slug || '',
     id:  p._id || p.id || p.uuid || p.slug || '',
     name: p.name || p.title || p.placeName || 'Untitled',
-    city:
-      p.city ||
-      p.location?.city ||
-      p.address?.city ||
-      p.meta?.city ||
-      '',
-    country:
-      p.country ||
-      p.location?.country ||
-      p.address?.country ||
-      p.meta?.country ||
-      '',
+    city: p.city || p.location?.city || p.address?.city || p.meta?.city || '',
+    country: p.country || p.location?.country || p.address?.country || p.meta?.country || '',
   })).filter(x => x.id);
 }
 
-// Common small helper to pick arrays when API already uses common envelopes
-const pickArray = (res, pref) => {
-  const d = res?.data;
-  if (pref && Array.isArray(d?.[pref])) return d[pref];
-  return [d?.data, d?.items, d?.results, d?.docs, d?.activities, d?.places, d].find(Array.isArray) || [];
-};
+// Upload images to /media/upload
+async function uploadImages(files) {
+  const fd = new FormData();
+  Array.from(files).forEach((f) => fd.append("images", f));
+  const r = await api.post("/media/upload", fd, { 
+    headers: { "Content-Type": "multipart/form-data" } 
+  });
+  const urls = r?.data?.urls || [];
+  if (!urls.length) throw new Error("Upload returned no URLs");
+  return urls;
+}
 
 const categories = [
   'cultural','nature','art','spiritual','food',

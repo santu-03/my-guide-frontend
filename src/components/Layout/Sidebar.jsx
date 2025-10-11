@@ -212,19 +212,19 @@ export default function Sidebar({
       <aside className={sidebarClasses}>
         
         {/* Header with Logo and Collapse Toggle */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800" onClick={() => navigate("/")}>
           <Link 
             to={getDashboardRoute()}
             className={`group flex items-center gap-3 font-bold text-lg hover:opacity-80 transition-opacity ${
               isCollapsed ? "justify-center" : ""
             }`}
-            onClick={() => setIsOpen(false)}
             title="Go to dashboard"
+            aria-label="Go to dashboard"
           >
             <img
               src="/images/LOGO2.png"   
               alt="TourGuide Logo"
-              className="w-10 h-auto group-hover:scale-105 transition-transform"
+              className="w-10 h-auto group-hover:scale-105 transition-transform "
               onError={(e) => { e.currentTarget.src = "/default-logo.png"; }}
             />
             {!isCollapsed && (

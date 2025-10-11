@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
@@ -15,9 +16,30 @@ import {
   RefreshCw,
   Loader2
 } from "lucide-react";
-import { useAuthStore } from "@/store/auth";
 import toast from "react-hot-toast";
 import Button from "../../components/ui/Button";
+import { api, useAuthStore } from "@/store/auth"; // ✅ Centralized import
+
+/* =============== API helpers =============== */
+async function getDashboardStats() {
+  const { data } = await api.get('/dashboard/stats');
+  return data;
+}
+
+async function getActivities(params = {}) {
+  const { data } = await api.get('/activities', { params });
+  return data?.activities || data?.data?.activities || data || [];
+}
+
+async function getPlaces(params = {}) {
+  const { data } = await api.get('/places', { params });
+  return data?.places || data?.data?.places || data || [];
+}
+
+async function getUsers(params = {}) {
+  const { data } = await api.get('/users', { params });
+  return data?.users || data?.data?.users || data || [];
+}
 
 export default function AdminDashboard() {
   const { user } = useAuthStore();

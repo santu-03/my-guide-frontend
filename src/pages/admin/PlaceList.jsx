@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import Button from "@/components/ui/Button";
@@ -21,25 +20,11 @@ import {
   Loader2,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { api, useAuthStore } from '@/store/auth'; // ✅ Centralized import
 
-/* -------------------------- local API (same as ActivityList) -------------------------- */
-const API_BASE =
-  import.meta.env.VITE_BACKEND_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000/api";
-
-const api = axios.create({ baseURL: API_BASE });
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-// Places
+/* =============== API helpers =============== */
 async function getPlaces(params = {}) {
   const { data } = await api.get("/places", { params });
-  // Accept common shapes
   return (
     data?.places ||
     data?.data?.places ||
@@ -58,7 +43,6 @@ async function deletePlace(id) {
   return api.delete(`/places/${id}`);
 }
 
-// Activities (for counts by place)
 async function getActivities(params = {}) {
   const { data } = await api.get("/activities", { params });
   return (
@@ -71,14 +55,6 @@ async function getActivities(params = {}) {
   );
 }
 
-// Minimal shim so we can pass `user` into the layout
-function useAuthStore() {
-  try {
-    return { user: JSON.parse(localStorage.getItem("user") || "null") };
-  } catch {
-    return { user: null };
-  }
-}
 /* -------------------------------------------------------------------------------------- */
 
 export default function PlaceList() {

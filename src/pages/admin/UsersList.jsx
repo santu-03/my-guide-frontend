@@ -1,6 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import axios from "axios";
 
+import { useState, useMemo, useEffect } from "react";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
@@ -17,69 +16,27 @@ import {
   Loader2,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { api, useAuthStore } from '@/store/auth';
 
-/* ---------------- API client (robust auth) ---------------- */
-const API_BASE =
-  import.meta.env.VITE_BACKEND_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000/api";
-
-const TOKEN_KEYS = [
-  "token","accessToken","jwt","adminToken",
-  "superadminToken","vendorToken","managerToken","userToken",
-];
-
-function getStoredToken() {
-  for (const k of TOKEN_KEYS) {
-    const raw = localStorage.getItem(k);
-    if (!raw) continue;
-    try {
-      const parsed = JSON.parse(raw);
-      if (typeof parsed === "string") return parsed;
-      return parsed?.token || parsed?.accessToken || parsed?.data?.token || parsed?.data?.accessToken || null;
-    } catch {
-      return raw; // plain string
-    }
-  }
-  try {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    return user?.token || user?.accessToken || null;
-  } catch { return null; }
-}
-
-const api = axios.create({
-  baseURL: API_BASE,
-  withCredentials: true,
-});
-
-
-/* ---------------- API helpers ---------------- */
+/* =============== API helpers =============== */
 async function getUsers(params = {}) {
   const { data } = await api.get("/users", { params });
-  // Normalized server returns an array
   return Array.isArray(data)
     ? data
     : (data?.users || data?.data?.users || data?.docs || data?.results || []);
 }
 
 async function updateUserStatus(id, status) {
-  return api.patch(`/users/${id}`, { status });
+  const { data } = await api.patch(`/users/${id}`, { status });
+  return data;
 }
 
 async function deleteUser(id) {
-  return api.delete(`/users/${id}`);
+  const { data } = await api.delete(`/users/${id}`);
+  return data;
 }
 
-/* ---------------- local user shim ---------------- */
-function useAuthStore() {
-  try {
-    return { user: JSON.parse(localStorage.getItem("user") || "null") };
-  } catch {
-    return { user: null };
-  }
-}
-
-/* ---------------- Component ---------------- */
+/* ========================================== */
 
 export default function UsersList() {
   const { user } = useAuthStore();
@@ -104,20 +61,20 @@ export default function UsersList() {
       if (searchTerm) params.search = searchTerm;
       if (filterRole !== "all") params.role = filterRole;
       params.sortBy = sortBy;
-      params.limit = 100; // Adjust as needed
+      params.limit = 100;
       
-      const response = await getUsers(params);
-      const usersData = response.data || response.users || response;
-      
+      const usersData = await getUsers(params);
       setUsers(Array.isArray(usersData) ? usersData : []);
+      
     } catch (err) {
       console.error('Error fetching users:', err);
-      setError(err.message || 'Failed to load users');
+      setError(err.response?.data?.message || err.message || 'Failed to load users');
       setUsers([]);
     } finally {
       setLoading(false);
     }
   };
+
 
   // Initial fetch and refetch when filters change
   useEffect(() => {
