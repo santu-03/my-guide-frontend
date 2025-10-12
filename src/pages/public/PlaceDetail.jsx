@@ -7,6 +7,7 @@ import { MapPin, Star, Image as ImgIcon, Compass, BadgeCheck } from 'lucide-reac
 import { Card, CardContent } from '@/components/ui/Card';
 import { LoadingSkeleton, SkeletonText } from '@/components/ui/LoadingSkeleton';
 import Button from '@/components/ui/Button';
+import FavoriteButton from '@/components/ui/FavoriteButton';
 import { api, getStoredToken } from '@/store/auth'; // ✅ Centralized axios + token
 
 // /* -------------------------------------------------------------------- */
@@ -111,6 +112,9 @@ export default function PlaceDetail() {
                   <BadgeCheck className="h-3.5 w-3.5" /> Featured
                 </div>
               )}
+              <div className="absolute right-3 top-3">
+  <FavoriteButton itemId={id} type="place" />
+</div>
             </div>
 
             {/* Meta card */}

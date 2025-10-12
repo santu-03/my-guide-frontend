@@ -281,7 +281,9 @@ import Signup from "@/pages/auth/Signup";
 /* ---------- Booking ---------- */
 import BookingFlow from "@/pages/booking/BookingFlow";         // existing
 import BookingConfirm from "@/pages/booking/BookingConfirm";   // new (provided earlier)
-import MyBookings from "@/pages/account/MyBookings";           // new (provided earlier)
+import MyBookings from "@/pages/account/MyBookings";  
+import Wishlist from "@/pages/account/Wishlist"; 
+import Profile from "@/pages/account/Profile";        // new (provided earlier)
 
 /* ---------- Dashboards ---------- */
 import TravellerDashboard from "@/pages/dashboards/TravellerDashboard";
@@ -487,6 +489,12 @@ export default function Router() {
         <Route path="/account/bookings" element={<ProtectedRoute />}>
           <Route index element={<MyBookings />} />
         </Route>
+        {/* Wishlist route */}
+        <Route path="/account/wishlist" element={<ProtectedRoute />}>
+        <Route index element={<Wishlist />} />
+        </Route>
+        
+        <Route path="/account/profile" element={<ProtectedRoute />}><Route index element={<Profile />} /></Route>
 
         {/* ---------- 404 ---------- */}
         <Route path="*" element={<NotFound />} />

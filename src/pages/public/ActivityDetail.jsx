@@ -7,6 +7,7 @@ import {
 import { Card, CardContent } from '@/components/ui/Card';
 import { LoadingSkeleton, SkeletonText, SkeletonButton } from '@/components/ui/LoadingSkeleton';
 import Button from '@/components/ui/Button';
+import FavoriteButton from '@/components/ui/FavoriteButton';
 import { api, getStoredToken, useAuthStore   } from '@/store/auth'; 
 
 const formatINR = (price) =>
@@ -123,6 +124,9 @@ export default function ActivityDetail() {
                   <BadgeCheck className="h-3.5 w-3.5" /> Popular
                 </div>
               )}
+              <div className="absolute right-3 top-3">
+  <FavoriteButton itemId={id} type="activity" />
+</div>
             </div>
 
             {/* Booking Card */}
