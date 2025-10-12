@@ -432,7 +432,7 @@ export default function Router() {
           path="/admin/places"
           element={
             <ProtectedRoute>
-              <RoleGate allowedRoles={["admin,guide,advisor"]}>
+              <RoleGate allowedRoles={["admin","guide","advisor"]}>
                 <PlaceList />
               </RoleGate>
             </ProtectedRoute>
@@ -452,7 +452,7 @@ export default function Router() {
           path="/admin/activities"
           element={
             <ProtectedRoute>
-              <RoleGate allowedRoles={["admin,instructor,advisor"]}>
+              <RoleGate allowedRoles={["admin","instructor","advisor"]}>
                 <ActivityList />
               </RoleGate>
             </ProtectedRoute>
