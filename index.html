@@ -3,15 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>My Guide</title>
-    <!-- ✅ Add this line -->
-    <link rel="icon" href="/LOGO2.png" type="image/png" sizes="32x32" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="My Guide - Your travel companion" />
     
+    <title>My Guide</title>
+    <link rel="icon" href="/LOGO2.png" type="image/png" />
+    
+    <!-- Prevent theme flash on load -->
+    <script>
+      const stored = localStorage.getItem('my-guide-ui');
+      if (stored) {
+        const theme = JSON.parse(stored).state.theme;
+        document.documentElement.classList.add(theme);
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.add('light');
+      }
+    </script>
   </head>
-  <body class="bg-gray-50">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
