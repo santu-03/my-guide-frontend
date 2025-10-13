@@ -83,35 +83,39 @@ export default function InstructorDashboard() {
   }, [courses, upcomingSessions, reviews]);
 
   const metrics = [
-    {
-      icon: BookOpen,
-      label: "Active Courses",
-      value: stats.activeCourses.toString(),
-      trend: { direction: "up", value: "+1 this month" },
-      color: "primary"
-    },
-    {
-      icon: Users,
-      label: "Total Students",
-      value: stats.totalStudents.toString(),
-      trend: { direction: "up", value: "+15%" },
-      color: "success"
-    },
-    {
-      icon: DollarSign,
-      label: "Monthly Earnings",
-      value: `₹${stats.monthlyEarnings.toLocaleString()}`,
-      trend: { direction: "up", value: "+22%" },
-      color: "warning"
-    },
-    {
-      icon: Star,
-      label: "Average Rating",
-      value: stats.avgRating.toString(),
-      color: "neutral"
-    },
-  ];
-
+  {
+    icon: BookOpen,
+    label: "Active Courses",
+    value: stats.activeCourses.toString(),
+    trend: { direction: "up", value: "+1", period: "this month" },
+    color: "primary",
+    variant: "gradient"
+  },
+  {
+    icon: Users,
+    label: "Total Students",
+    value: stats.totalStudents.toString(),
+    trend: { direction: "up", value: "+15%", period: "this quarter" },
+    color: "success",
+    variant: "gradient"
+  },
+  {
+    icon: DollarSign,
+    label: "Monthly Earnings",
+    value: `₹${stats.monthlyEarnings.toLocaleString()}`,
+    trend: { direction: "up", value: "+22%", period: "vs last month" },
+    color: "warning",
+    variant: "gradient"
+  },
+  {
+    icon: Star,
+    label: "Average Rating",
+    value: stats.avgRating.toString(),
+    trend: { direction: "up", value: "+0.3" },
+    color: "purple",
+    variant: "gradient"
+  },
+];
   return (
     <DashboardLayout role="instructor" title="Instructor Dashboard" user={user}>
       

@@ -78,28 +78,31 @@ export default function AdvisorDashboard() {
   }, [travellers, upcomingPlans, testimonials]);
 
   const metrics = [
-    {
-      icon: Users,
-      label: "Total Travellers",
-      value: stats.totalTravellers.toString(),
-      trend: { direction: "up", value: "+12%" },
-      color: "success",
-    },
-    {
-      icon: Calendar,
-      label: "Upcoming Trips",
-      value: stats.upcomingTrips.toString(),
-      trend: { direction: "up", value: "+3 this month" },
-      color: "primary",
-    },
-    {
-      icon: Star,
-      label: "Avg. Rating",
-      value: stats.avgRating.toString(),
-      trend: { direction: "up", value: "+0.2" },
-      color: "neutral",
-    },
-  ];
+  {
+    icon: Users,
+    label: "Total Travellers",
+    value: stats.totalTravellers.toString(),
+    trend: { direction: "up", value: "+12%", period: "this month" },
+    color: "success",
+    variant: "gradient",
+  },
+  {
+    icon: Calendar,
+    label: "Upcoming Trips",
+    value: stats.upcomingTrips.toString(),
+    trend: { direction: "up", value: "+3", period: "this week" },
+    color: "primary",
+    variant: "gradient",
+  },
+  {
+    icon: Star,
+    label: "Avg. Rating",
+    value: stats.avgRating.toString(),
+    trend: { direction: "up", value: "+0.2" },
+    color: "purple",
+    variant: "gradient",
+  },
+];
 
   return (
     <DashboardLayout role="advisor" title="Advisor Dashboard" user={user}>

@@ -46,33 +46,40 @@ export default function TravellerDashboard() {
   }, [userBookings, activities]);
 
   const metrics = [
-    { 
-      icon: MapPin, 
-      label: "Upcoming Trips", 
-      value: stats.upcomingTrips.toString(),
-      trend: { direction: "up", value: "+2 this month" },
-      color: "primary",
-      to: "/traveller/trips"
-    },
-    { 
-      icon: Calendar, 
-      label: "Total Bookings", 
-      value: stats.totalBookings.toString(),
-      color: "success"
-    },
-    { 
-      icon: DollarSign, 
-      label: "Total Spent", 
-      value: `₹${stats.totalSpent.toLocaleString()}`,
-      color: "warning"
-    },
-    { 
-      icon: Star, 
-      label: "Places Visited", 
-      value: stats.placesVisited.toString(),
-      color: "neutral"
-    },
-  ];
+  { 
+    icon: MapPin, 
+    label: "Upcoming Trips", 
+    value: stats.upcomingTrips.toString(),
+    trend: { direction: "up", value: "+2", period: "this month" },
+    color: "primary",
+    variant: "gradient",
+    to: "/account/bookings"
+  },
+  { 
+    icon: Calendar, 
+    label: "Total Bookings", 
+    value: stats.totalBookings.toString(),
+    trend: { direction: "up", value: "+3" },
+    color: "success",
+    variant: "gradient"
+  },
+  { 
+    icon: DollarSign, 
+    label: "Total Spent", 
+    value: `₹${stats.totalSpent.toLocaleString()}`,
+    trend: { direction: "up", value: "+12%" },
+    color: "warning",
+    variant: "gradient"
+  },
+  { 
+    icon: Star, 
+    label: "Places Visited", 
+    value: stats.placesVisited.toString(),
+    trend: { direction: "up", value: "+2" },
+    color: "purple",
+    variant: "gradient"
+  },
+];
 
   // Featured activities for discovery
   const featuredActivities = useMemo(() => {

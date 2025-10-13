@@ -1,169 +1,3 @@
-// import { useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
-// import { Heart, MapPin, Trash2 } from 'lucide-react';
-// import { api } from '@/store/auth';
-
-// export default function Wishlist() {
-//   const [wishlist, setWishlist] = useState({ places: [], activities: [] });
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetchWishlist();
-//   }, []);
-
-//   const fetchWishlist = async () => {
-//     try {
-//       setLoading(true);
-//       const res = await api.get('/wishlist');
-//       setWishlist({
-//         places: res.data?.data?.places || [],
-//         activities: res.data?.data?.activities || [],
-//       });
-//     } catch (err) {
-//       console.error('Failed to fetch wishlist:', err);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const removeItem = async (itemId, type) => {
-//     try {
-//       await api.post('/wishlist/toggle', { itemId, type });
-//       fetchWishlist();
-//     } catch (err) {
-//       console.error('Failed to remove item:', err);
-//     }
-//   };
-
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center">
-//         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-//       </div>
-//     );
-//   }
-
-//   const isEmpty = wishlist.places.length === 0 && wishlist.activities.length === 0;
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 py-8">
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         <div className="flex items-center gap-3 mb-8">
-//           <Heart className="h-8 w-8 text-red-500 fill-red-500" />
-//           <h1 className="text-3xl font-bold text-gray-900">My Wishlist</h1>
-//         </div>
-
-//         {isEmpty ? (
-//           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-//             <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-//             <h2 className="text-xl font-semibold text-gray-900 mb-2">Your wishlist is empty</h2>
-//             <p className="text-gray-600 mb-6">Save your favorite places and activities!</p>
-//             <Link
-//               to="/search"
-//               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
-//             >
-//               Explore Now
-//             </Link>
-//           </div>
-//         ) : (
-//           <div className="space-y-12">
-//             {/* Places */}
-//             {wishlist.places.length > 0 && (
-//               <section>
-//                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-//                   Places ({wishlist.places.length})
-//                 </h2>
-//                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//                   {wishlist.places.map((place) => (
-//                     <div
-//                       key={place._id}
-//                       className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
-//                     >
-//                       <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-100">
-//                         <button
-//                           onClick={() => removeItem(place._id, 'place')}
-//                           className="absolute right-3 top-3 p-2 bg-white rounded-full shadow hover:bg-red-50 transition"
-//                         >
-//                           <Trash2 className="h-4 w-4 text-red-600" />
-//                         </button>
-//                       </div>
-//                       <div className="p-4">
-//                         <Link to={`/places/${place._id}`}>
-//                           <h3 className="font-semibold text-gray-900 mb-2 hover:text-primary-600">
-//                             {place.title || place.name}
-//                           </h3>
-//                         </Link>
-//                         {place.city && (
-//                           <div className="flex items-center text-sm text-gray-600 mb-3">
-//                             <MapPin className="h-4 w-4 mr-1" />
-//                             {place.city}
-//                           </div>
-//                         )}
-//                         <Link
-//                           to={`/places/${place._id}`}
-//                           className="block w-full text-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
-//                         >
-//                           View Place
-//                         </Link>
-//                       </div>
-//                     </div>
-//                   ))}
-//                 </div>
-//               </section>
-//             )}
-
-//             {/* Activities */}
-//             {wishlist.activities.length > 0 && (
-//               <section>
-//                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-//                   Activities ({wishlist.activities.length})
-//                 </h2>
-//                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//                   {wishlist.activities.map((activity) => (
-//                     <div
-//                       key={activity._id}
-//                       className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
-//                     >
-//                       <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-100 flex items-center justify-center text-5xl">
-//                         🎯
-//                         <button
-//                           onClick={() => removeItem(activity._id, 'activity')}
-//                           className="absolute right-3 top-3 p-2 bg-white rounded-full shadow hover:bg-red-50 transition"
-//                         >
-//                           <Trash2 className="h-4 w-4 text-red-600" />
-//                         </button>
-//                       </div>
-//                       <div className="p-4">
-//                         <Link to={`/activities/${activity._id}`}>
-//                           <h3 className="font-semibold text-gray-900 mb-2 hover:text-primary-600">
-//                             {activity.title}
-//                           </h3>
-//                         </Link>
-//                         <div className="flex items-center justify-between mb-3">
-//                           <span className="text-lg font-bold text-gray-900">
-//                             ₹{activity.basePrice?.toLocaleString()}
-//                           </span>
-//                           <span className="text-xs text-gray-500">per person</span>
-//                         </div>
-//                         <Link
-//                           to={`/booking?activity=${activity._id}`}
-//                           className="block w-full text-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
-//                         >
-//                           Book Now
-//                         </Link>
-//                       </div>
-//                     </div>
-//                   ))}
-//                 </div>
-//               </section>
-//             )}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-// src/pages/account/Wishlist.jsx
 import React, { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
@@ -397,37 +231,48 @@ export default function Wishlist() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          icon={Heart}
-          label="Total Saved"
-          value={String(counts.total)}
-          color="primary"
-          trend={{ direction: "up", value: "+2", period: "this week" }}
-        />
-        <StatCard
-          icon={MapPin}
-          label="Places"
-          value={String(counts.places)}
-          color="warning"
-          trend={{ direction: counts.places ? "up" : "down", value: "", period: "" }}
-        />
-        <StatCard
-          icon={Calendar}
-          label="Activities"
-          value={String(counts.activities)}
-          color="success"
-          trend={{ direction: counts.activities ? "up" : "down", value: "", period: "" }}
-        />
-        <StatCard
-          icon={IndianRupee}
-          label="Est. Value"
-          value={inr(estimatedValue)}
-          color="success"
-          trend={{ direction: "up", value: "+", period: "" }}
-        />
+      {/* Enhanced Stats with Gradient Cards */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-6 text-white shadow-lg">
+    <div className="flex items-center justify-between mb-2">
+      <Heart className="h-8 w-8 opacity-80" />
+      <div className="text-right">
+        <div className="text-3xl font-bold">{counts.total}</div>
+        <div className="text-sm opacity-90">Total Saved</div>
       </div>
+    </div>
+  </div>
 
+  <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg">
+    <div className="flex items-center justify-between mb-2">
+      <MapPin className="h-8 w-8 opacity-80" />
+      <div className="text-right">
+        <div className="text-3xl font-bold">{counts.places}</div>
+        <div className="text-sm opacity-90">Places</div>
+      </div>
+    </div>
+  </div>
+
+  <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg">
+    <div className="flex items-center justify-between mb-2">
+      <Calendar className="h-8 w-8 opacity-80" />
+      <div className="text-right">
+        <div className="text-3xl font-bold">{counts.activities}</div>
+        <div className="text-sm opacity-90">Activities</div>
+      </div>
+    </div>
+  </div>
+
+  <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white shadow-lg">
+    <div className="flex items-center justify-between mb-2">
+      <IndianRupee className="h-8 w-8 opacity-80" />
+      <div className="text-right">
+        <div className="text-2xl font-bold">{inr(estimatedValue)}</div>
+        <div className="text-sm opacity-90">Est. Value</div>
+      </div>
+    </div>
+  </div>
+</div>
       {/* Controls */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-800/70 mb-8">
         <div className="flex flex-col md:flex-row md:items-center gap-3 p-4">

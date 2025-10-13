@@ -79,35 +79,39 @@ export default function GuideDashboard() {
   }, [activities, bookings]);
 
   const metrics = [
-    {
-      icon: Users,
-      label: "Upcoming Tours",
-      value: stats.upcomingTours.toString(),
-      trend: { direction: "up", value: "+3 this week" },
-      color: "primary",
-    },
-    {
-      icon: Calendar,
-      label: "Tours This Month",
-      value: stats.monthlyBookings.toString(),
-      trend: { direction: "up", value: "+12%" },
-      color: "success",
-    },
-    {
-      icon: DollarSign,
-      label: "Total Earnings",
-      value: `₹${stats.totalEarnings.toLocaleString()}`,
-      trend: { direction: "up", value: "+8%" },
-      color: "warning",
-    },
-    {
-      icon: Star,
-      label: "Average Rating",
-      value: "4.8",
-      color: "neutral",
-    },
-  ];
-
+  {
+    icon: Users,
+    label: "Upcoming Tours",
+    value: stats.upcomingTours.toString(),
+    trend: { direction: "up", value: "+3", period: "this week" },
+    color: "primary",
+    variant: "gradient",
+  },
+  {
+    icon: Calendar,
+    label: "Tours This Month",
+    value: stats.monthlyBookings.toString(),
+    trend: { direction: "up", value: "+12%", period: "vs last month" },
+    color: "success",
+    variant: "gradient",
+  },
+  {
+    icon: DollarSign,
+    label: "Total Earnings",
+    value: `₹${stats.totalEarnings.toLocaleString()}`,
+    trend: { direction: "up", value: "+8%", period: "this month" },
+    color: "warning",
+    variant: "gradient",
+  },
+  {
+    icon: Star,
+    label: "Average Rating",
+    value: "4.8",
+    trend: { direction: "up", value: "+0.2" },
+    color: "purple",
+    variant: "gradient",
+  },
+];
   // 🎒 Upcoming tours with activity + place info
   const upcomingTours = useMemo(() => {
     const now = new Date();
