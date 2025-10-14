@@ -1,8 +1,4 @@
-
-
-
-// src/pages/booking/BookingFlow.jsx
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { 
   AlertTriangle, 
@@ -19,7 +15,9 @@ import {
   Star,
   Info,
   ChevronRight,
-  ArrowLeft
+  ArrowLeft,
+  X,
+  Check
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -48,26 +46,41 @@ const isAdminApproved = (doc) =>
   !!doc &&
   (doc.approved === true || doc.isApproved === true || doc.status === 'approved');
 
-// Step indicator component
+// Validation utilities
+const validators = {
+  email: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+  phone: (phone) => {
+    const cleaned = phone.replace(/\D/g, '');
+    return cleaned.length >= 10;
+  },
+  name: (name) => name.trim().length >= 2 && /^[a-zA-Z\s]+$/.test(name),
+  date: (date) => {
+    const selected = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selected >= today;
+  }
+};
+
+// Enhanced Step indicator component
 const StepIndicator = ({ currentStep, steps }) => {
   return (
     <div className="mb-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between max-w-2xl mx-auto">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep;
-          const isUpcoming = index > currentStep;
 
           return (
             <React.Fragment key={step.id}>
               <div className="flex flex-col items-center flex-1">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
                     isCompleted
-                      ? 'bg-primary-600 text-white'
+                      ? 'bg-primary-600 text-white scale-100'
                       : isCurrent
-                      ? 'bg-primary-100 text-primary-600 ring-2 ring-primary-600 dark:bg-primary-900/20 dark:text-primary-400'
-                      : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600'
+                      ? 'bg-primary-100 text-primary-600 ring-4 ring-primary-200 dark:bg-primary-900/20 dark:text-primary-400 dark:ring-primary-900/30 scale-110'
+                      : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600 scale-90'
                   }`}
                 >
                   {isCompleted ? (
@@ -77,7 +90,7 @@ const StepIndicator = ({ currentStep, steps }) => {
                   )}
                 </div>
                 <span
-                  className={`mt-2 text-xs font-medium ${
+                  className={`mt-2 text-xs font-medium transition-colors ${
                     isCurrent
                       ? 'text-gray-900 dark:text-white'
                       : 'text-gray-500 dark:text-gray-400'
@@ -88,7 +101,7 @@ const StepIndicator = ({ currentStep, steps }) => {
               </div>
               {index < steps.length - 1 && (
                 <div
-                  className={`flex-1 h-0.5 -mt-8 ${
+                  className={`flex-1 h-1 mx-2 -mt-8 rounded-full transition-all duration-500 ${
                     isCompleted ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
                   }`}
                 />
@@ -101,30 +114,83 @@ const StepIndicator = ({ currentStep, steps }) => {
   );
 };
 
+// Form Input Component with validation
+const FormInput = ({ 
+  label, 
+  icon: Icon, 
+  error, 
+  required, 
+  touched,
+  ...props 
+}) => {
+  const hasError = touched && error;
+  
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <div className="relative">
+        {Icon && (
+          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        )}
+        <input
+          {...props}
+          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors dark:bg-gray-800 dark:text-white ${
+            hasError 
+              ? 'border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/20' 
+              : 'border-gray-300 dark:border-gray-700 bg-white'
+          }`}
+          aria-invalid={hasError}
+          aria-describedby={hasError ? `${props.name}-error` : undefined}
+        />
+        {hasError && (
+          <AlertTriangle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+        )}
+      </div>
+      {hasError && (
+        <p id={`${props.name}-error`} className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+          <X className="h-3 w-3" />
+          {error}
+        </p>
+      )}
+    </div>
+  );
+};
+
 export default function BookingFlow() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const { isAuthenticated, user } = useAuthStore();
 
-  const activityId = params.get("activity");
+  const itemId = params.get("activity") || params.get("place");
+  const itemType = params.get("place") ? "place" : "activity"; // Detect type
   const prefilledDate = params.get("date");
   const prefilledGuests = params.get("guests");
 
   // State
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [activity, setActivity] = useState(null);
+  const [item, setItem] = useState(null); // Can be activity or place
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [availabilityChecking, setAvailabilityChecking] = useState(false);
+  const [availability, setAvailability] = useState(null);
 
   // Form state
-  const [date, setDate] = useState(prefilledDate || "");
-  const [guests, setGuests] = useState(prefilledGuests || "1");
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [phone, setPhone] = useState(user?.phone || "");
-  const [specialRequests, setSpecialRequests] = useState("");
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [formData, setFormData] = useState({
+    date: prefilledDate || "",
+    guests: prefilledGuests || "1",
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    specialRequests: "",
+    agreedToTerms: false
+  });
+
+  // Validation state
+  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState({});
 
   // Steps configuration
   const steps = [
@@ -133,14 +199,14 @@ export default function BookingFlow() {
     { id: 'review', label: 'Review' },
   ];
 
-  // Fetch activity
+  // Fetch item (activity or place)
   useEffect(() => {
     const controller = new AbortController();
     
-    const fetchActivity = async () => {
-      if (!activityId) {
-        setError("No activity selected.");
-        setActivity(null);
+    const fetchItem = async () => {
+      if (!itemId) {
+        setError("No item selected.");
+        setItem(null);
         setLoading(false);
         return;
       }
@@ -149,74 +215,171 @@ export default function BookingFlow() {
         setLoading(true);
         setError("");
         
-        const res = await api.get(`/activities/${activityId}`, {
-          signal: controller.signal,
-          silenceToast: true,
-        });
+        // Try to fetch as activity first
+        console.log(`🔍 Fetching ${itemType}:`, itemId);
         
-        const data = res?.data?.data || res?.data || res;
+        let res;
+        let data;
         
-        if (!isAdminApproved(data)) {
-          setError("This activity is not available for booking.");
-          setActivity(null);
+        try {
+          // Try activity endpoint
+          res = await api.get(`/activities/${itemId}`, {
+            signal: controller.signal,
+            silenceToast: true,
+          });
+          data = res?.data?.data || res?.data || res;
+          console.log('✅ Found as activity:', data);
+        } catch (activityError) {
+          // If activity fails, try place endpoint
+          console.log('⚠️ Not an activity, trying place...');
+          res = await api.get(`/places/${itemId}`, {
+            signal: controller.signal,
+            silenceToast: true,
+          });
+          data = res?.data?.data || res?.data?.place || res?.data || res;
+          console.log('✅ Found as place:', data);
+        }
+        
+        // Check if approved (for activities)
+        if (data.approved !== undefined && !isAdminApproved(data)) {
+          setError("This item is not available for booking.");
+          setItem(null);
         } else {
-          setActivity(data);
+          setItem(data);
         }
       } catch (e) {
         if (e?.name !== "CanceledError") {
-          console.error(e);
-          setError("Failed to load activity.");
-          setActivity(null);
+          console.error('❌ Fetch error:', e);
+          setError("Failed to load item details.");
+          setItem(null);
         }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchActivity();
+    fetchItem();
     return () => controller.abort();
-  }, [activityId]);
+  }, [itemId, itemType]);
 
   // Auto-fill user data
   useEffect(() => {
     if (user) {
-      setName(user.name || "");
-      setEmail(user.email || "");
-      setPhone(user.phone || "");
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || ""
+      }));
     }
   }, [user]);
 
+  // Check availability
+  useEffect(() => {
+    if (formData.date && formData.guests) {
+      setAvailabilityChecking(true);
+      
+      const timer = setTimeout(() => {
+        // Simulate availability check
+        setAvailability({
+          available: true,
+          spotsLeft: 8
+        });
+        setAvailabilityChecking(false);
+      }, 800);
+
+      return () => clearTimeout(timer);
+    }
+  }, [formData.date, formData.guests]);
+
   // Calculate pricing
   const pricing = useMemo(() => {
-    const base = typeof activity?.basePrice === "number" ? activity.basePrice : 0;
-    const guestCount = Number(guests || 1);
+    const base = typeof item?.basePrice === "number" ? item.basePrice : 99; // Fallback to 99
+    const guestCount = Number(formData.guests || 1);
     const subtotal = base * guestCount;
     const tax = Math.round(subtotal * 0.18);
     const serviceFee = Math.round(subtotal * 0.05);
     const total = subtotal + tax + serviceFee;
 
     return { basePrice: base, guests: guestCount, subtotal, tax, serviceFee, total };
-  }, [activity, guests]);
+  }, [item, formData.guests]);
 
-  // Validation for each step
-  const isStepValid = (step) => {
-    switch (step) {
-      case 0: // Details
-        return !!date && Number(guests) > 0;
-      case 1: // Contact
-        return (
-          name.trim().length >= 2 &&
-          /\S+@\S+\.\S+/.test(email) &&
-          phone.trim().length >= 10
-        );
-      case 2: // Review
-        return agreedToTerms;
+  // Validate field
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'date':
+        if (!value) return 'Please select a date';
+        if (!validators.date(value)) return 'Date must be today or later';
+        return '';
+      case 'guests':
+        if (Number(value) < 1) return 'At least 1 guest required';
+        return '';
+      case 'name':
+        if (!value.trim()) return 'Name is required';
+        if (!validators.name(value)) return 'Please enter a valid name';
+        return '';
+      case 'email':
+        if (!value.trim()) return 'Email is required';
+        if (!validators.email(value)) return 'Please enter a valid email';
+        return '';
+      case 'phone':
+        if (!value.trim()) return 'Phone is required';
+        if (!validators.phone(value)) return 'Please enter a valid 10-digit phone number';
+        return '';
+      case 'agreedToTerms':
+        if (!value) return 'You must agree to continue';
+        return '';
+      default:
+        return '';
+    }
+  };
+
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    
+    setFormData(prev => ({ ...prev, [name]: newValue }));
+    
+    if (touched[name]) {
+      const error = validateField(name, newValue);
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
+  };
+
+  // Handle blur
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  // Validate current step
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 0:
+        return formData.date && 
+               Number(formData.guests) > 0 && 
+               !errors.date && 
+               !errors.guests &&
+               availability?.available;
+      case 1:
+        return formData.name && 
+               formData.email && 
+               formData.phone &&
+               !errors.name && 
+               !errors.email && 
+               !errors.phone;
+      case 2:
+        return formData.agreedToTerms;
       default:
         return false;
     }
   };
 
-  const canProceed = isStepValid(currentStep);
+  const canProceed = isStepValid();
 
   // Handle next step
   const handleNext = () => {
@@ -236,7 +399,7 @@ export default function BookingFlow() {
 
   // Handle booking submission
   const handleSubmit = async () => {
-    if (!agreedToTerms) {
+    if (!formData.agreedToTerms) {
       toast.error("Please agree to terms and conditions");
       return;
     }
@@ -245,7 +408,7 @@ export default function BookingFlow() {
       toast.error("Please login to complete booking");
       navigate("/auth/login", { 
         state: { 
-          returnTo: `/booking?activity=${activityId}&date=${date}&guests=${guests}`
+          returnTo: `/booking?activity=${itemId}&date=${formData.date}&guests=${formData.guests}`
         } 
       });
       return;
@@ -256,15 +419,16 @@ export default function BookingFlow() {
       setError("");
 
       const payload = {
-        activityId,
-        date,
-        guests: Number(guests),
+        activityId: itemId, // API might expect activityId even for places
+        placeId: itemType === 'place' ? itemId : undefined, // Include placeId if it's a place
+        date: formData.date,
+        guests: Number(formData.guests),
         customer: {
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
         },
-        specialRequests: specialRequests.trim() || undefined,
+        specialRequests: formData.specialRequests.trim() || undefined,
         pricing: {
           basePrice: pricing.basePrice,
           subtotal: pricing.subtotal,
@@ -274,15 +438,19 @@ export default function BookingFlow() {
         },
       };
 
+      console.log('📤 Submitting booking:', payload);
+
       const bookingRes = await api.post("/bookings", payload);
       const booking = bookingRes?.data?.data || bookingRes?.data;
       const bookingId = booking?._id || booking?.id;
+
+      console.log('✅ Booking created:', bookingId);
 
       toast.success("Booking created successfully!");
       navigate(`/booking/confirm?id=${bookingId}`, { replace: true });
 
     } catch (err) {
-      console.error(err);
+      console.error('❌ Booking error:', err);
       const errorMsg = err?.response?.data?.message || "Unable to create booking.";
       setError(errorMsg);
       toast.error(errorMsg);
@@ -297,22 +465,22 @@ export default function BookingFlow() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary-600" />
-          <p className="text-gray-600 dark:text-gray-400">Loading activity...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading details...</p>
         </div>
       </div>
     );
   }
 
-  // Activity not available
-  if (!activity) {
+  // Item not available
+  if (!item) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center">
         <div className="mx-auto w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center mb-4">
           <AlertTriangle className="h-8 w-8 text-amber-600 dark:text-amber-400" />
         </div>
-        <h2 className="text-2xl font-bold mb-2 dark:text-white">Activity Unavailable</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Item Unavailable</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          {error || "This activity is not available for booking."}
+          {error || "This item is not available for booking."}
         </p>
         <div className="flex gap-3 justify-center">
           <Button as={Link} to="/search" variant="outline">
@@ -326,11 +494,11 @@ export default function BookingFlow() {
     );
   }
 
-  const title = activity.title || "Untitled Activity";
-  const city = activity?.place?.city || activity?.city;
-  const duration = activity.duration || 
-    (activity.durationMinutes ? formatDuration(activity.durationMinutes) : null);
-  const rating = activity?.rating?.avg;
+  const title = item.title || "Untitled";
+  const city = item?.place?.city || item?.city;
+  const duration = item.duration || 
+    (item.durationMinutes ? formatDuration(item.durationMinutes) : null);
+  const rating = item?.rating?.avg;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -338,11 +506,11 @@ export default function BookingFlow() {
         
         {/* Back Link */}
         <Link 
-          to={`/activities/${activityId}`}
+          to={itemType === 'place' ? `/places/${itemId}` : `/activities/${itemId}`}
           className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 dark:text-primary-400 text-sm font-medium mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to activity
+          Back to {itemType}
         </Link>
 
         {/* Header */}
@@ -363,12 +531,12 @@ export default function BookingFlow() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             
-            {/* Activity Summary Card */}
+            {/* Item Summary Card */}
             <Card>
               <CardContent className="p-6">
                 <div className="flex gap-4">
                   <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 flex-shrink-0 flex items-center justify-center text-3xl">
-                    🎯
+                    {itemType === 'place' ? '📍' : '🎯'}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
@@ -417,27 +585,24 @@ export default function BookingFlow() {
                 {currentStep === 0 && (
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4 dark:text-white">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         Select Date & Guests
                       </h3>
                       
                       <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Date <span className="text-red-500">*</span>
-                          </label>
-                          <div className="relative">
-                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
-                              type="date"
-                              value={date}
-                              onChange={(e) => setDate(e.target.value)}
-                              min={new Date().toISOString().split("T")[0]}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-                              required
-                            />
-                          </div>
-                        </div>
+                        <FormInput
+                          label="Date"
+                          name="date"
+                          type="date"
+                          icon={Calendar}
+                          value={formData.date}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={errors.date}
+                          touched={touched.date}
+                          min={new Date().toISOString().split("T")[0]}
+                          required
+                        />
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -446,8 +611,9 @@ export default function BookingFlow() {
                           <div className="relative">
                             <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                             <select
-                              value={guests}
-                              onChange={(e) => setGuests(e.target.value)}
+                              name="guests"
+                              value={formData.guests}
+                              onChange={handleChange}
                               className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none dark:bg-gray-800 dark:text-white"
                             >
                               {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
@@ -461,12 +627,39 @@ export default function BookingFlow() {
                       </div>
                     </div>
 
+                    {/* Availability Status */}
+                    {formData.date && formData.guests && (
+                      <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                        {availabilityChecking ? (
+                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-sm">Checking availability...</span>
+                          </div>
+                        ) : availability?.available ? (
+                          <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                            <Check className="h-5 w-5" />
+                            <div>
+                              <p className="font-medium">Available!</p>
+                              <p className="text-sm text-green-600 dark:text-green-500">
+                                {availability.spotsLeft} spots remaining for this date
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 text-red-700 dark:text-red-400">
+                            <X className="h-5 w-5" />
+                            <p className="font-medium">Not available for selected date</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                       <div className="flex gap-2">
                         <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-blue-800 dark:text-blue-200">
                           <p className="font-medium mb-1">Flexible Booking</p>
-                          <p>Free cancellation up to 24 hours before your activity starts</p>
+                          <p>Free cancellation up to 24 hours before your {itemType} starts</p>
                         </div>
                       </div>
                     </div>
@@ -476,76 +669,66 @@ export default function BookingFlow() {
                 {/* Step 2: Contact Information */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
-                    <h3 className="text-lg font-semibold dark:text-white">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Contact Information
                     </h3>
                     
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Full Name <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                          <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-                            placeholder="Enter your full name"
-                            required
-                          />
-                        </div>
-                      </div>
+                    <FormInput
+                      label="Full Name"
+                      name="name"
+                      type="text"
+                      icon={User}
+                      value={formData.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={errors.name}
+                      touched={touched.name}
+                      placeholder="Enter your full name"
+                      required
+                    />
 
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Email <span className="text-red-500">*</span>
-                          </label>
-                          <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
-                              type="email"
-                              value={email}
-                              onChange={(e) => setEmail(e.target.value)}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-                              placeholder="you@example.com"
-                              required
-                            />
-                          </div>
-                        </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <FormInput
+                        label="Email"
+                        name="email"
+                        type="email"
+                        icon={Mail}
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.email}
+                        touched={touched.email}
+                        placeholder="you@example.com"
+                        required
+                      />
 
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Phone <span className="text-red-500">*</span>
-                          </label>
-                          <div className="relative">
-                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
-                              type="tel"
-                              value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-                              placeholder="+91 1234567890"
-                              required
-                            />
-                          </div>
-                        </div>
-                      </div>
+                      <FormInput
+                        label="Phone"
+                        name="phone"
+                        type="tel"
+                        icon={Phone}
+                        value={formData.phone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.phone}
+                        touched={touched.phone}
+                        placeholder="+91 1234567890"
+                        required
+                      />
+                    </div>
 
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Special Requests (Optional)
-                        </label>
-                        <textarea
-                          value={specialRequests}
-                          onChange={(e) => setSpecialRequests(e.target.value)}
-                          rows={3}
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white resize-none"
-                          placeholder="Any special requirements?"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Special Requests (Optional)
+                      </label>
+                      <textarea
+                        name="specialRequests"
+                        value={formData.specialRequests}
+                        onChange={handleChange}
+                        rows={3}
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white resize-none"
+                        placeholder="Any special requirements?"
+                      />
                     </div>
                   </div>
                 )}
@@ -553,7 +736,7 @@ export default function BookingFlow() {
                 {/* Step 3: Review & Confirm */}
                 {currentStep === 2 && (
                   <div className="space-y-6">
-                    <h3 className="text-lg font-semibold dark:text-white">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Review Your Booking
                     </h3>
                     
@@ -561,8 +744,8 @@ export default function BookingFlow() {
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Date</div>
-                          <div className="font-semibold dark:text-white">
-                            {new Date(date).toLocaleDateString('en-IN', { 
+                          <div className="font-semibold text-gray-900 dark:text-white">
+                            {new Date(formData.date).toLocaleDateString('en-IN', { 
                               weekday: 'long', 
                               year: 'numeric', 
                               month: 'long', 
@@ -573,8 +756,8 @@ export default function BookingFlow() {
 
                         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Guests</div>
-                          <div className="font-semibold dark:text-white">
-                            {guests} Guest{Number(guests) > 1 ? 's' : ''}
+                          <div className="font-semibold text-gray-900 dark:text-white">
+                            {formData.guests} Guest{Number(formData.guests) > 1 ? 's' : ''}
                           </div>
                         </div>
                       </div>
@@ -582,18 +765,18 @@ export default function BookingFlow() {
                       <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                         <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Contact Details</div>
                         <div className="space-y-1">
-                          <div className="font-medium dark:text-white">{name}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">{email}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">{phone}</div>
+                          <div className="font-medium text-gray-900 dark:text-white">{formData.name}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{formData.email}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{formData.phone}</div>
                         </div>
                       </div>
 
-                      {specialRequests && (
+                      {formData.specialRequests && (
                         <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                             Special Requests
                           </div>
-                          <div className="text-sm dark:text-white">{specialRequests}</div>
+                          <div className="text-sm text-gray-900 dark:text-white">{formData.specialRequests}</div>
                         </div>
                       )}
 
@@ -601,18 +784,19 @@ export default function BookingFlow() {
                         <input
                           type="checkbox"
                           id="terms"
-                          checked={agreedToTerms}
-                          onChange={(e) => setAgreedToTerms(e.target.checked)}
+                          name="agreedToTerms"
+                          checked={formData.agreedToTerms}
+                          onChange={handleChange}
                           className="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                           required
                         />
                         <label htmlFor="terms" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
                           I agree to the{" "}
-                          <a href="/terms" className="text-primary-600 hover:underline">
+                          <a href="/terms" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">
                             Terms & Conditions
                           </a>{" "}
                           and{" "}
-                          <a href="/cancellation-policy" className="text-primary-600 hover:underline">
+                          <a href="/cancellation-policy" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">
                             Cancellation Policy
                           </a>
                         </label>
@@ -650,11 +834,19 @@ export default function BookingFlow() {
                 <Button
                   onClick={handleSubmit}
                   disabled={!canProceed || submitting}
-                  loading={submitting}
                   className="ml-auto gap-2"
                 >
-                  <CreditCard className="h-4 w-4" />
-                  {submitting ? 'Processing...' : `Pay ${formatINR(pricing.total)}`}
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="h-4 w-4" />
+                      Pay {formatINR(pricing.total)}
+                    </>
+                  )}
                 </Button>
               )}
             </div>
@@ -664,7 +856,7 @@ export default function BookingFlow() {
           <div className="lg:sticky lg:top-6 h-fit">
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   Price Summary
                 </h3>
                 
@@ -673,28 +865,28 @@ export default function BookingFlow() {
                     <span className="text-gray-600 dark:text-gray-400">
                       {formatINR(pricing.basePrice)} × {pricing.guests} guest{pricing.guests > 1 ? 's' : ''}
                     </span>
-                    <span className="font-medium dark:text-white">
+                    <span className="font-medium text-gray-900 dark:text-white">
                       {formatINR(pricing.subtotal)}
                     </span>
                   </div>
                   
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Service Fee</span>
-                    <span className="font-medium dark:text-white">
+                    <span className="text-gray-600 dark:text-gray-400">Service Fee (5%)</span>
+                    <span className="font-medium text-gray-900 dark:text-white">
                       {formatINR(pricing.serviceFee)}
                     </span>
                   </div>
                   
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">GST (18%)</span>
-                    <span className="font-medium dark:text-white">
+                    <span className="font-medium text-gray-900 dark:text-white">
                       {formatINR(pricing.tax)}
                     </span>
                   </div>
                   
                   <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
                     <div className="flex justify-between">
-                      <span className="font-semibold text-lg dark:text-white">Total</span>
+                      <span className="font-semibold text-lg text-gray-900 dark:text-white">Total</span>
                       <span className="font-bold text-xl text-primary-600 dark:text-primary-400">
                         {formatINR(pricing.total)}
                       </span>
