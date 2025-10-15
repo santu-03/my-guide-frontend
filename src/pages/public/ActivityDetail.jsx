@@ -490,7 +490,7 @@ export default function ActivityDetail() {
   const count = activity?.rating?.count;
   const city = activity?.place?.city || activity?.city || activity?.location?.city;
   const duration = activity.duration || (activity.durationMinutes ? formatDuration_A(activity.durationMinutes) : null);
-  const price = formatINR_A(99);
+  const price = formatINR(activity?.price || activity?.basePrice || 0);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
