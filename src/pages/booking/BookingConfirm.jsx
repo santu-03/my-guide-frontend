@@ -1,5 +1,3 @@
-
-
 // import React, { useEffect, useState } from "react";
 // import { useSearchParams, Link } from "react-router-dom";
 // import {
@@ -38,7 +36,7 @@
 //         month: "long",
 //         year: "numeric"
 //       })
-//     : "–";
+//     : "—";
 
 // export default function BookingConfirm() {
 //   const [p] = useSearchParams();
@@ -82,7 +80,9 @@
 //         await navigator.clipboard.writeText(window.location.href);
 //         toast.success("Link copied!");
 //       }
-//     } catch {}
+//     } catch (error) {
+//       console.error('Share error:', error);
+//     }
 //   };
 
 //   if (loading) {
@@ -124,20 +124,23 @@
 
 //   const activity = booking.activity || {};
 //   const place = booking.place || {};
-//   const title = activity.title || place.title || "Experience";
+//   const title = activity.title || place.title || place.name || "Experience";
 //   const city = activity.city || activity?.place?.city || place.city;
 //   const duration = activity.duration || place.duration;
 //   const rating = activity?.rating?.avg;
+  
+//   // ✅ Fixed: Use correct field names
 //   const customer =
 //     (booking.participantDetails && booking.participantDetails[0]) ||
 //     booking.customer ||
 //     {};
-//   const participants = booking.peopleCount || booking.participants || 1;
-//   const total = booking.totalAmount ?? booking?.pricing?.total ?? 0;
+//   const participants = booking.participants || booking.peopleCount || 1;
+//   const total = booking.totalAmount || booking?.pricing?.total || booking.amount || 0;
 
 //   return (
 //     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
 //       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
 //         {/* Success Header */}
 //         <div className="text-center mb-8">
 //           <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/20 rounded-full grid place-items-center mx-auto mb-4 animate-bounce">
@@ -159,6 +162,7 @@
 
 //         {/* Main Content */}
 //         <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          
 //           {/* Left Column - Booking Details */}
 //           <Card className="lg:col-span-2 border-0 shadow-md">
 //             <CardContent className="p-6 space-y-6">
@@ -169,7 +173,7 @@
 //               {/* Activity/Place Card */}
 //               <div className="flex gap-4 p-4 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 rounded-xl border border-primary-100 dark:border-primary-800">
 //                 <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 grid place-items-center text-3xl flex-shrink-0">
-//                   {place?.title ? "📍" : "🎯"}
+//                   {place?.title || place?.name ? "📍" : "🎯"}
 //                 </div>
 //                 <div className="flex-1 min-w-0">
 //                   <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-2">
@@ -229,7 +233,7 @@
 //                     <span className="text-sm font-medium">Email</span>
 //                   </div>
 //                   <p className="font-semibold text-gray-900 dark:text-white truncate">
-//                     {customer.email || "–"}
+//                     {customer.email || "—"}
 //                   </p>
 //                 </div>
 
@@ -239,7 +243,7 @@
 //                     <span className="text-sm font-medium">Phone</span>
 //                   </div>
 //                   <p className="font-semibold text-gray-900 dark:text-white">
-//                     {customer.phone || "–"}
+//                     {customer.phone || "—"}
 //                   </p>
 //                 </div>
 //               </div>
@@ -384,7 +388,6 @@
 //     </div>
 //   );
 // }
-
 import React, { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import {
@@ -444,8 +447,12 @@ export default function BookingConfirm() {
         const r = await api.get(`/bookings/${id}`, { silenceToast: true });
         const data = r?.data?.data || r?.data?.booking || r?.data;
         const bk = data?.booking || data;
-        if (mounted) setBooking(bk);
+        if (mounted) {
+          setBooking(bk);
+          console.log("Booking data loaded:", bk);
+        }
       } catch (e) {
+        console.error("Failed to load booking:", e);
         if (mounted) setError(e?.response?.data?.message || "Failed to load booking.");
       } finally {
         if (mounted) setLoading(false);
@@ -470,6 +477,11 @@ export default function BookingConfirm() {
     } catch (error) {
       console.error('Share error:', error);
     }
+  };
+
+  const downloadReceipt = () => {
+    toast.success("Receipt download started");
+    // Implement receipt download logic here
   };
 
   if (loading) {
@@ -509,6 +521,7 @@ export default function BookingConfirm() {
     );
   }
 
+  // Fixed: Handle different data structures
   const activity = booking.activity || {};
   const place = booking.place || {};
   const title = activity.title || place.title || place.name || "Experience";
@@ -516,10 +529,10 @@ export default function BookingConfirm() {
   const duration = activity.duration || place.duration;
   const rating = activity?.rating?.avg;
   
-  // ✅ Fixed: Use correct field names
-  const customer =
-    (booking.participantDetails && booking.participantDetails[0]) ||
-    booking.customer ||
+  // Fixed: Use correct field names from booking schema
+  const customer = 
+    (booking.participantDetails && booking.participantDetails[0]) || 
+    booking.customer || 
     {};
   const participants = booking.participants || booking.peopleCount || 1;
   const total = booking.totalAmount || booking?.pricing?.total || booking.amount || 0;
@@ -668,7 +681,7 @@ export default function BookingConfirm() {
               <div className="flex gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => toast.success("Receipt download started")}
+                  onClick={downloadReceipt}
                   startIcon={<Download className="h-4 w-4" />}
                   className="flex-1"
                 >

@@ -1,8 +1,6 @@
-// // src/pages/account/MyBookings.jsx
 // import React, { useEffect, useState, useMemo } from "react";
 // import { Link } from "react-router-dom";
 // import DashboardLayout from "@/components/Layout/DashboardLayout";
-// import StatCard from "@/components/Layout/StatCard";
 // import {
 //   Calendar,
 //   Users,
@@ -21,7 +19,6 @@
 //   Package,
 //   Eye,
 //   Trash2,
-//   MessageCircle,
 //   ArrowRight,
 //   Sparkles,
 //   MapPinned,
@@ -32,7 +29,6 @@
 // import { api, useAuthStore } from "@/store/auth";
 // import toast from "react-hot-toast";
 
-// // Inline formatters
 // const formatINR = (price) =>
 //   typeof price !== "number"
 //     ? "₹—"
@@ -99,18 +95,15 @@
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState("");
   
-//   // Filters
 //   const [statusFilter, setStatusFilter] = useState("all");
 //   const [searchQuery, setSearchQuery] = useState("");
 //   const [sortBy, setSortBy] = useState("date-desc");
 
-//   // Cancel modal
 //   const [showCancelModal, setShowCancelModal] = useState(false);
 //   const [cancelingBooking, setCancelingBooking] = useState(null);
 //   const [cancelReason, setCancelReason] = useState("");
 //   const [canceling, setCanceling] = useState(false);
 
-//   // Fetch bookings
 //   const fetchBookings = async () => {
 //     try {
 //       setLoading(true);
@@ -137,7 +130,6 @@
 //     fetchBookings();
 //   }, []);
 
-//   // Apply filters
 //   useEffect(() => {
 //     let result = [...bookings];
 
@@ -168,7 +160,6 @@
 //     setFilteredBookings(result);
 //   }, [bookings, statusFilter, searchQuery, sortBy]);
 
-//   // Handle cancel booking
 //   const handleCancelClick = (booking) => {
 //     setCancelingBooking(booking);
 //     setCancelReason("");
@@ -203,7 +194,6 @@
 //     }
 //   };
 
-//   // Stats
 //   const stats = useMemo(() => ({
 //     total: bookings.length,
 //     upcoming: bookings.filter((b) => b.status === "confirmed" && new Date(b.date) >= new Date()).length,
@@ -214,12 +204,11 @@
 //   const totalSpent = useMemo(() => {
 //     return bookings
 //       .filter((b) => b.status === "confirmed" || b.status === "completed")
-//       .reduce((sum, b) => sum + (b.pricing?.total || b.amount || 0), 0);
+//       .reduce((sum, b) => sum + (b.totalAmount || b.pricing?.total || b.amount || 0), 0);
 //   }, [bookings]);
 
 //   return (
 //     <DashboardLayout role="traveller" title="My Bookings" user={user}>
-//       {/* Header */}
 //       <div className="mb-8">
 //         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 //           <div>
@@ -255,7 +244,6 @@
 //         </div>
 //       </div>
 
-//       {/* Enhanced Stats Grid */}
 //       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 //         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
 //           <div className="flex items-center justify-between mb-2">
@@ -298,12 +286,9 @@
 //         </div>
 //       </div>
 
-//       {/* Filters Card */}
 //       <Card className="mb-6 border-0 shadow-md">
 //         <CardContent className="p-6">
 //           <div className="flex flex-col lg:flex-row gap-4">
-            
-//             {/* Search */}
 //             <div className="flex-1 relative">
 //               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
 //               <input
@@ -315,7 +300,6 @@
 //               />
 //             </div>
 
-//             {/* Status Filter */}
 //             <div className="lg:w-48 relative">
 //               <Filter className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
 //               <select
@@ -331,7 +315,6 @@
 //               </select>
 //             </div>
 
-//             {/* Sort */}
 //             <select
 //               value={sortBy}
 //               onChange={(e) => setSortBy(e.target.value)}
@@ -345,7 +328,6 @@
 //         </CardContent>
 //       </Card>
 
-//       {/* Error Display */}
 //       {error && (
 //         <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
 //           <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
@@ -355,7 +337,6 @@
 //         </div>
 //       )}
 
-//       {/* Loading State */}
 //       {loading ? (
 //         <div className="space-y-4">
 //           {[...Array(3)].map((_, i) => (
@@ -376,7 +357,6 @@
 //           ))}
 //         </div>
 //       ) : filteredBookings.length === 0 ? (
-//         /* Empty State */
 //         <Card className="border-0 shadow-md">
 //           <CardContent className="p-12 text-center">
 //             <div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -403,7 +383,6 @@
 //           </CardContent>
 //         </Card>
 //       ) : (
-//         /* Bookings List */
 //         <div className="space-y-5">
 //           {filteredBookings.map((booking) => {
 //             const activity = booking.activity || {};
@@ -415,32 +394,30 @@
 //               !isPast &&
 //               new Date(booking.date) - new Date() > 24 * 60 * 60 * 1000;
 
+//             // ✅ Fixed: Use correct field names from Booking model
+//             const participants = booking.participants || booking.peopleCount || 1;
+//             const totalAmount = booking.totalAmount || booking.pricing?.total || booking.amount || 0;
+            
+//             // ✅ Fixed: Handle image URL properly (can be string or object)
+//             const activityImage = typeof activity.images?.[0] === 'string' 
+//               ? activity.images[0] 
+//               : activity.images?.[0]?.url || '/assets/images/placeholder-image.jpg';
+
 //             return (
 //               <Card key={booking._id} className="border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
 //                 <CardContent className="p-0">
 //                   <div className="flex flex-col lg:flex-row">
                     
-//                     {/* Activity Image */}
 //                     <div className="relative lg:w-64 h-48 lg:h-auto overflow-hidden">
-//                       {activity.images?.[0] ? (
-//                         <img
-//                           src={activity.images[0].url}
-//                           alt={activity.title}
-//                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-//                           onError={(e) => {
-//                             e.target.style.display = "none";
-//                             e.target.nextElementSibling.style.display = "flex";
-//                           }}
-//                         />
-//                       ) : null}
-//                       <div 
-//                         className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center text-6xl"
-//                         style={{ display: activity.images?.[0] ? 'none' : 'flex' }}
-//                       >
-//                         🎯
-//                       </div>
+//                       <img
+//                         src={activityImage}
+//                         alt={activity.title}
+//                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+//                         onError={(e) => {
+//                           e.target.src = '/assets/images/placeholder-image.jpg';
+//                         }}
+//                       />
                       
-//                       {/* Status Badge Overlay */}
 //                       <div className="absolute top-4 left-4">
 //                         <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold ${statusInfo.color} backdrop-blur-sm`}>
 //                           <StatusIcon className="h-4 w-4" />
@@ -448,7 +425,6 @@
 //                         </span>
 //                       </div>
 
-//                       {/* Quick View Button */}
 //                       <Link
 //                         to={`/booking/confirm?id=${booking._id}`}
 //                         className="absolute bottom-4 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
@@ -457,7 +433,6 @@
 //                       </Link>
 //                     </div>
 
-//                     {/* Booking Info */}
 //                     <div className="flex-1 p-6 lg:p-8">
 //                       <div className="flex items-start justify-between gap-4 mb-4">
 //                         <div className="flex-1 min-w-0">
@@ -484,7 +459,6 @@
 //                         </div>
 //                       </div>
 
-//                       {/* Info Grid */}
 //                       <div className="grid grid-cols-3 gap-6 mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
 //                         <div>
 //                           <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wide font-medium">
@@ -502,7 +476,7 @@
 //                           </div>
 //                           <div className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
 //                             <Users className="h-4 w-4 text-primary-600 dark:text-primary-400" />
-//                             {booking.guests} {booking.guests > 1 ? "Guests" : "Guest"}
+//                             {participants} {participants > 1 ? "Guests" : "Guest"}
 //                           </div>
 //                         </div>
 
@@ -511,12 +485,11 @@
 //                             Total Amount
 //                           </div>
 //                           <div className="font-bold text-xl text-primary-600 dark:text-primary-400">
-//                             {formatINR(booking.pricing?.total || booking.amount || 0)}
+//                             {formatINR(totalAmount)}
 //                           </div>
 //                         </div>
 //                       </div>
 
-//                       {/* Actions */}
 //                       <div className="flex flex-wrap gap-3">
 //                         <Button
 //                           as={Link}
@@ -582,10 +555,8 @@
 //         </div>
 //       )}
 
-//       {/* Explore More Section - Always visible at bottom */}
 //       {!loading && (
 //         <div className="mt-12 grid md:grid-cols-2 gap-6">
-//           {/* Browse Places Card */}
 //           <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white overflow-hidden group hover:shadow-2xl transition-all duration-300">
 //             <CardContent className="p-8 relative">
 //               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500" />
@@ -610,7 +581,6 @@
 //             </CardContent>
 //           </Card>
 
-//           {/* Browse Activities Card */}
 //           <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-500 to-pink-600 text-white overflow-hidden group hover:shadow-2xl transition-all duration-300">
 //             <CardContent className="p-8 relative">
 //               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500" />
@@ -637,7 +607,6 @@
 //         </div>
 //       )}
 
-//       {/* Cancel Modal */}
 //       <Modal
 //         isOpen={showCancelModal}
 //         onClose={() => !canceling && setShowCancelModal(false)}
@@ -704,7 +673,6 @@
 //     </DashboardLayout>
 //   );
 // }
-
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
@@ -807,9 +775,11 @@ export default function MyBookings() {
   const [sortBy, setSortBy] = useState("date-desc");
 
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [cancelingBooking, setCancelingBooking] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [activeBooking, setActiveBooking] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
   const [canceling, setCanceling] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchBookings = async () => {
     try {
@@ -820,14 +790,32 @@ export default function MyBookings() {
         silenceToast: true,
       });
 
-      const data = res?.data?.data || res?.data?.bookings || res?.data || [];
-      const bookingsArray = Array.isArray(data) ? data : [];
+      // Handle different response structures
+      let bookingsArray = [];
+      
+      if (res.data?.data?.bookings) {
+        bookingsArray = res.data.data.bookings;
+      } else if (res.data?.bookings) {
+        bookingsArray = res.data.bookings;
+      } else if (Array.isArray(res.data?.data)) {
+        bookingsArray = res.data.data;
+      } else if (Array.isArray(res.data)) {
+        bookingsArray = res.data;
+      }
 
-      setBookings(bookingsArray);
-      setFilteredBookings(bookingsArray);
+      // Ensure all bookings have proper IDs
+      const normalizedBookings = bookingsArray.map(booking => ({
+        ...booking,
+        id: booking.id || booking._id,
+        _id: booking._id || booking.id,
+      }));
+
+      setBookings(normalizedBookings);
+      setFilteredBookings(normalizedBookings);
     } catch (err) {
       console.error(err);
       setError(err?.response?.data?.message || "Failed to load bookings");
+      toast.error("Failed to load bookings");
     } finally {
       setLoading(false);
     }
@@ -847,9 +835,16 @@ export default function MyBookings() {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       result = result.filter((b) => {
-        const title = b.activity?.title?.toLowerCase() || "";
-        const city = b.activity?.city?.toLowerCase() || "";
-        return title.includes(query) || city.includes(query);
+        const activity = b.activity || {};
+        const place = b.place || {};
+        const title = activity.title || activity.name || place.title || place.name || "";
+        const city = activity.city || place.city || "";
+        const bookingId = b.id || b._id || "";
+        return (
+          title.toLowerCase().includes(query) || 
+          city.toLowerCase().includes(query) ||
+          bookingId.toLowerCase().includes(query)
+        );
       });
     }
 
@@ -868,36 +863,92 @@ export default function MyBookings() {
   }, [bookings, statusFilter, searchQuery, sortBy]);
 
   const handleCancelClick = (booking) => {
-    setCancelingBooking(booking);
+    setActiveBooking(booking);
     setCancelReason("");
     setShowCancelModal(true);
   };
 
+  const handleDeleteClick = (booking) => {
+    setActiveBooking(booking);
+    setShowDeleteModal(true);
+  };
+
   const handleCancelConfirm = async () => {
-    if (!cancelingBooking) return;
+    if (!activeBooking) return;
 
     try {
       setCanceling(true);
+      const bookingId = activeBooking._id || activeBooking.id;
 
-      await api.patch(`/bookings/${cancelingBooking._id}/cancel`, {
+      await api.patch(`/bookings/${bookingId}/cancel`, {
         reason: cancelReason.trim() || "Cancelled by user",
       });
 
-      setBookings((prev) =>
-        prev.map((b) =>
-          b._id === cancelingBooking._id ? { ...b, status: "cancelled" } : b
+      // Update the booking status in real-time
+      setBookings(prev => 
+        prev.map(b => 
+          (b._id === bookingId || b.id === bookingId) 
+            ? { ...b, status: 'cancelled' }
+            : b
         )
       );
 
       toast.success("Booking cancelled successfully");
       setShowCancelModal(false);
-      setCancelingBooking(null);
+      setActiveBooking(null);
       setCancelReason("");
     } catch (err) {
-      console.error(err);
+      console.error("Cancel booking error:", err);
       toast.error(err?.response?.data?.message || "Failed to cancel booking");
     } finally {
       setCanceling(false);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!activeBooking) return;
+
+    try {
+      setDeleting(true);
+      const bookingId = activeBooking._id || activeBooking.id;
+
+      await api.delete(`/bookings/${bookingId}`);
+
+      // Remove booking from list in real-time
+      setBookings(prev => 
+        prev.filter(b => (b._id !== bookingId && b.id !== bookingId))
+      );
+
+      toast.success("Booking deleted successfully");
+      setShowDeleteModal(false);
+      setActiveBooking(null);
+    } catch (err) {
+      console.error("Delete booking error:", err);
+      toast.error(err?.response?.data?.message || "Failed to delete booking");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleQuickStatusUpdate = async (bookingId, newStatus) => {
+    try {
+      await api.patch(`/bookings/${bookingId}/quick-status`, {
+        status: newStatus,
+      });
+
+      // Update booking status in real-time
+      setBookings(prev => 
+        prev.map(b => 
+          (b._id === bookingId || b.id === bookingId) 
+            ? { ...b, status: newStatus }
+            : b
+        )
+      );
+
+      toast.success(`Booking ${newStatus} successfully`);
+    } catch (err) {
+      console.error("Update status error:", err);
+      toast.error(err?.response?.data?.message || "Failed to update booking");
     }
   };
 
@@ -906,6 +957,7 @@ export default function MyBookings() {
     upcoming: bookings.filter((b) => b.status === "confirmed" && new Date(b.date) >= new Date()).length,
     completed: bookings.filter((b) => b.status === "completed").length,
     cancelled: bookings.filter((b) => b.status === "cancelled").length,
+    pending: bookings.filter((b) => b.status === "pending").length,
   }), [bookings]);
 
   const totalSpent = useMemo(() => {
@@ -951,48 +1003,70 @@ export default function MyBookings() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center justify-between mb-2">
-            <Calendar className="h-8 w-8 opacity-80" />
-            <div className="text-right">
-              <div className="text-3xl font-bold">{stats.total}</div>
-              <div className="text-sm opacity-90">Total Bookings</div>
+      {/* Enhanced Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <Calendar className="h-8 w-8 opacity-80" />
+              <div className="text-right">
+                <div className="text-2xl font-bold">{stats.total}</div>
+                <div className="text-xs opacity-90">Total</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center justify-between mb-2">
-            <CheckCircle2 className="h-8 w-8 opacity-80" />
-            <div className="text-right">
-              <div className="text-3xl font-bold">{stats.upcoming}</div>
-              <div className="text-sm opacity-90">Upcoming</div>
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <CheckCircle2 className="h-8 w-8 opacity-80" />
+              <div className="text-right">
+                <div className="text-2xl font-bold">{stats.upcoming}</div>
+                <div className="text-xs opacity-90">Upcoming</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="h-8 w-8 opacity-80" />
-            <div className="text-right">
-              <div className="text-3xl font-bold">{stats.completed}</div>
-              <div className="text-sm opacity-90">Completed</div>
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <TrendingUp className="h-8 w-8 opacity-80" />
+              <div className="text-right">
+                <div className="text-2xl font-bold">{stats.completed}</div>
+                <div className="text-xs opacity-90">Completed</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center justify-between mb-2">
-            <Package className="h-8 w-8 opacity-80" />
-            <div className="text-right">
-              <div className="text-2xl font-bold">{formatINR(totalSpent)}</div>
-              <div className="text-sm opacity-90">Total Spent</div>
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-500 to-amber-600 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <Clock className="h-8 w-8 opacity-80" />
+              <div className="text-right">
+                <div className="text-2xl font-bold">{stats.pending}</div>
+                <div className="text-xs opacity-90">Pending</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <Package className="h-8 w-8 opacity-80" />
+              <div className="text-right">
+                <div className="text-xl font-bold">{formatINR(totalSpent)}</div>
+                <div className="text-xs opacity-90">Total Spent</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
+      {/* Enhanced Filters */}
       <Card className="mb-6 border-0 shadow-md">
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row gap-4">
@@ -1000,7 +1074,7 @@ export default function MyBookings() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by activity or city..."
+                placeholder="Search by activity, place, city, or booking ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-all"
@@ -1037,9 +1111,14 @@ export default function MyBookings() {
 
       {error && (
         <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
-          <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
-            <p>{error}</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
+              <AlertCircle className="h-5 w-5 flex-shrink-0" />
+              <p>{error}</p>
+            </div>
+            <Button onClick={fetchBookings} variant="outline" size="sm">
+              Retry
+            </Button>
           </div>
         </div>
       )}
@@ -1093,32 +1172,31 @@ export default function MyBookings() {
         <div className="space-y-5">
           {filteredBookings.map((booking) => {
             const activity = booking.activity || {};
+            const place = booking.place || {};
             const statusInfo = getStatusInfo(booking.status);
             const StatusIcon = statusInfo.icon;
             const isPast = new Date(booking.date) < new Date();
-            const canCancel = 
-              booking.status === "confirmed" && 
-              !isPast &&
-              new Date(booking.date) - new Date() > 24 * 60 * 60 * 1000;
+            const canCancel = booking.status === "confirmed" && !isPast;
+            const canDelete = booking.status === "cancelled" || isPast;
 
-            // ✅ Fixed: Use correct field names from Booking model
+            const item = activity.title ? activity : place;
             const participants = booking.participants || booking.peopleCount || 1;
             const totalAmount = booking.totalAmount || booking.pricing?.total || booking.amount || 0;
-            
-            // ✅ Fixed: Handle image URL properly (can be string or object)
-            const activityImage = typeof activity.images?.[0] === 'string' 
-              ? activity.images[0] 
-              : activity.images?.[0]?.url || '/assets/images/placeholder-image.jpg';
+            const bookingId = booking._id || booking.id;
+
+            const itemImage = typeof item.images?.[0] === 'string' 
+              ? item.images[0] 
+              : item.images?.[0]?.url || '/assets/images/placeholder-image.jpg';
 
             return (
-              <Card key={booking._id} className="border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+              <Card key={bookingId} className="border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <CardContent className="p-0">
                   <div className="flex flex-col lg:flex-row">
                     
                     <div className="relative lg:w-64 h-48 lg:h-auto overflow-hidden">
                       <img
-                        src={activityImage}
-                        alt={activity.title}
+                        src={itemImage}
+                        alt={item.title || item.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         onError={(e) => {
                           e.target.src = '/assets/images/placeholder-image.jpg';
@@ -1133,7 +1211,7 @@ export default function MyBookings() {
                       </div>
 
                       <Link
-                        to={`/booking/confirm?id=${booking._id}`}
+                        to={`/booking/confirm?id=${bookingId}`}
                         className="absolute bottom-4 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
                       >
                         <Eye className="h-5 w-5 text-gray-900 dark:text-white" />
@@ -1144,22 +1222,28 @@ export default function MyBookings() {
                       <div className="flex items-start justify-between gap-4 mb-4">
                         <div className="flex-1 min-w-0">
                           <Link
-                            to={`/booking/confirm?id=${booking._id}`}
+                            to={`/booking/confirm?id=${bookingId}`}
                             className="text-2xl font-bold text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 line-clamp-1 transition-colors"
                           >
-                            {activity.title || "Activity"}
+                            {item.title || item.name || "Booking"}
                           </Link>
                           <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-gray-600 dark:text-gray-400">
-                            {activity.city && (
+                            {item.city && (
                               <span className="inline-flex items-center gap-1.5 font-medium">
                                 <MapPin className="h-4 w-4" />
-                                {activity.city}
+                                {item.city}
                               </span>
                             )}
-                            {activity.rating?.avg && (
+                            {item.duration && (
+                              <span className="inline-flex items-center gap-1.5 font-medium">
+                                <Clock className="h-4 w-4" />
+                                {item.duration}
+                              </span>
+                            )}
+                            {item.rating?.avg && (
                               <span className="inline-flex items-center gap-1.5 font-medium">
                                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                {Number(activity.rating.avg).toFixed(1)} Rating
+                                {Number(item.rating.avg).toFixed(1)}
                               </span>
                             )}
                           </div>
@@ -1200,13 +1284,38 @@ export default function MyBookings() {
                       <div className="flex flex-wrap gap-3">
                         <Button
                           as={Link}
-                          to={`/booking/confirm?id=${booking._id}`}
+                          to={`/booking/confirm?id=${bookingId}`}
                           size="sm"
                           className="gap-2"
                         >
                           <Eye className="h-4 w-4" />
                           View Details
                         </Button>
+
+                        {/* Quick Status Actions */}
+                        {booking.status === 'pending' && (
+                          <Button
+                            onClick={() => handleQuickStatusUpdate(bookingId, 'confirmed')}
+                            size="sm"
+                            variant="outline"
+                            className="gap-2 text-emerald-600 border-emerald-300 hover:bg-emerald-50"
+                          >
+                            <CheckCircle2 className="h-4 w-4" />
+                            Confirm
+                          </Button>
+                        )}
+
+                        {booking.status === 'confirmed' && isPast && (
+                          <Button
+                            onClick={() => handleQuickStatusUpdate(bookingId, 'completed')}
+                            size="sm"
+                            variant="outline"
+                            className="gap-2 text-blue-600 border-blue-300 hover:bg-blue-50"
+                          >
+                            <CheckCircle2 className="h-4 w-4" />
+                            Mark Complete
+                          </Button>
+                        )}
 
                         {canCancel && (
                           <Button
@@ -1215,15 +1324,27 @@ export default function MyBookings() {
                             variant="outline"
                             className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 gap-2"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <XCircle className="h-4 w-4" />
                             Cancel
+                          </Button>
+                        )}
+
+                        {canDelete && (
+                          <Button
+                            onClick={() => handleDeleteClick(booking)}
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 gap-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
                           </Button>
                         )}
 
                         {booking.status === "completed" && (
                           <Button
                             as={Link}
-                            to={`/activities/${activity._id || activity.id}`}
+                            to={activity._id ? `/activities/${activity._id}` : `/places/${place._id}`}
                             size="sm"
                             variant="outline"
                             className="gap-2"
@@ -1244,12 +1365,12 @@ export default function MyBookings() {
 
                         <Button
                           as={Link}
-                          to={`/activities/${activity._id || activity.id}`}
+                          to={activity._id ? `/activities/${activity._id}` : `/places/${place._id}`}
                           size="sm"
                           variant="ghost"
                           className="gap-2 ml-auto"
                         >
-                          View Activity
+                          View {activity._id ? "Activity" : "Place"}
                           <ArrowRight className="h-4 w-4" />
                         </Button>
                       </div>
@@ -1314,6 +1435,7 @@ export default function MyBookings() {
         </div>
       )}
 
+      {/* Cancel Modal */}
       <Modal
         isOpen={showCancelModal}
         onClose={() => !canceling && setShowCancelModal(false)}
@@ -1373,6 +1495,57 @@ export default function MyBookings() {
               disabled={canceling}
             >
               {canceling ? "Cancelling..." : "Yes, Cancel Booking"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => !deleting && setShowDeleteModal(false)}
+        title="Delete Booking"
+        size="md"
+      >
+        <div className="space-y-5">
+          <div className="flex items-start gap-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
+            <div className="w-10 h-10 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center flex-shrink-0">
+              <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-red-900 dark:text-red-100 mb-1">
+                Delete Booking Permanently?
+              </h4>
+              <p className="text-sm text-red-700 dark:text-red-300">
+                This action cannot be undone. All booking data will be permanently removed from our systems.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-200 dark:border-amber-800">
+            <p className="text-sm text-amber-900 dark:text-amber-100">
+              <strong>Note:</strong> Only cancelled or past bookings can be deleted. 
+              Active bookings must be cancelled first.
+            </p>
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button
+              onClick={() => setShowDeleteModal(false)}
+              variant="outline"
+              className="flex-1"
+              disabled={deleting}
+            >
+              Keep Booking
+            </Button>
+            <Button
+              onClick={handleDeleteConfirm}
+              variant="danger"
+              className="flex-1"
+              loading={deleting}
+              disabled={deleting}
+            >
+              {deleting ? "Deleting..." : "Yes, Delete Permanently"}
             </Button>
           </div>
         </div>
