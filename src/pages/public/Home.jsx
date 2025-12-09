@@ -691,13 +691,13 @@ export default function Home() {
 
       const [placesRes, activitiesRes] = await Promise.all([
         api.get('/places', { 
-          params: { featured: true, limit: 6, approved: true } 
+          params: { featured: true, limit: 100, approved: true } 
         }).catch((e) => {
           console.error('❌ Places fetch error:', e);
           return { data: [] };
         }),
         api.get('/activities', {
-          params: { featured: true, isPublished: true, limit: 8 }
+          params: { featured: true, isPublished: true, limit: 100 }
         }).catch((e) => {
           console.error('❌ Activities fetch error:', e);
           return { data: [] };

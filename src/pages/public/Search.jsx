@@ -974,8 +974,8 @@ export default function Search() {
     return p;
   };
 
-  const LIMIT_PLACES = 24;
-  const LIMIT_ACTIVITIES = 24;
+  const LIMIT_PLACES = 100;
+  const LIMIT_ACTIVITIES = 100;
 
   const fetchResults = useCallback(async (f) => {
     try {
